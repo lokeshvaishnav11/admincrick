@@ -13,6 +13,7 @@ import MyBetComponent22 from './my-bet-component22'
 import { selectUserData } from '../../../redux/actions/login/loginSlice'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
+import { CustomLink } from '../../_layout/elements/custom-link'
 
 const MatchDetailWrapper = (props: any) => {
   const dispatch = useAppDispatch()
@@ -33,17 +34,23 @@ const shared = useParams().share
   return (
     <>
       <div className='prelative'>
-        <Tabs>
-          <Tab eventKey='home' title='ODDS'>
-            <div className='game-heading clsforellipse mb-1' >
-              <span className='card-header-title giveMeEllipsis'>{props.currentMatch?.name}</span>
-              <span className='float-right card-header-date'>
+        <div>
+          <div title='ODDS'>
+            <div className='game-heading text-center clsforellipse mb-1' style={{justifyContent: "center",textTransform:"capitalize" }} >
+              <span onClick={() => settvstatus(tavstatus ? false : true)} className='card-header-title giveMeEllipsis'>xLive TV</span>
+             
+          {/* <span className='text-center' onClick={() => settvstatus(tavstatus ? false : true)}>
+           <i className='fa fa-tv' />   Live TV
+          </span> */}
+      
+              {/* <span className='float-right card-header-date'>
                               { moment(props.currentMatch?.matchDateTime).format('MM/DD/YYYY  h:mm a') }
                 
-              </span>
+              </span> */}
             </div>
-            {props.scoreBoard()}
+           
             {tavstatus && props.otherTv()}
+            {props.scoreBoard()}
 
 
 
@@ -213,7 +220,7 @@ const shared = useParams().share
               </div>
             </div>
             {props.marketDataList.stake && <PlaceBetBox stake={props.marketDataList.stake} />}
-          </Tab>
+          </div>
           {/* <Tab eventKey='profile' title={`PLACED BET (${betCount})`}>
             <div className='card m-b-10 my-bet'>
               <div className='card-header'>
@@ -224,12 +231,14 @@ const shared = useParams().share
               </div>
             </div> 
           </Tab> */}
-        </Tabs>
-        <div className='csmobileround' style={{ top: '16px' }}>
-          <span onClick={() => settvstatus(tavstatus ? false : true)}>
-           <i className='fa fa-tv' />   Live TV
-          </span>
+            <div className="back-main-menu my-2">
+               {userState?.user?.role == "user" ?  <CustomLink to="/match/4">BACK TO INPLAY GAMES</CustomLink> :
+                <CustomLink to="/market-analysis">BACK TO INPLAY GAMES</CustomLink>}
+
+
+             </div>
         </div>
+       
       </div>
     </>
   )

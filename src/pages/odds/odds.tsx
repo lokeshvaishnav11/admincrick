@@ -377,7 +377,7 @@ const Odds = () => {
 
   return !isMobile || (isMobile && userState?.user?.role != RoleType.user) ? (
     <>
-      <MatchDetail
+      <MatchDetailMobile
         currentMatch={currentMatch}
         fancies={
           moment().isSame(moment(currentMatch?.matchDateTime), "day") &&

@@ -9,6 +9,8 @@ import { nFormatter } from "../../../../../utils/helper";
 
 const LayButton = (props: any) => {
     const { selectionid, lastOdds, liveMatchData, clsnamename } = props;
+    console.log(props,"propsps")
+    
     const dispatch = useAppDispatch()
     const userState = useAppSelector(selectUserData)
     const onBet = (isBack = false, item: any) => {
@@ -46,14 +48,14 @@ const LayButton = (props: any) => {
     }
     const ItemMarket: any = lastOdds?.[selectionid] || {}
     return <>
-     <td className={`back teen-section ${clsnamename}`}>
-              <button className='back' onClick={() => onBet(true, ItemMarket)}>
-                <span className='odd'>{ItemMarket.b1}</span>{' '}
+     <td className={` teen-section ${clsnamename} ${liveMatchData?.slug == "AAA" ? "aaabuttonBack" : "back" }`}>
+              <button className={`${liveMatchData?.slug == "AAA" ? "" : "back" } text-white `} onClick={() => onBet(true, ItemMarket)}>
+               <span className='odd'>{ItemMarket.b1}</span>{' '}
                 <span className='fw-12 laysize' style={{display:"block"}}>{nFormatter(ItemMarket.bs1, 2)}</span>
               </button>
             </td>
-            <td className={`lay teen-section ${clsnamename}`}>
-              <button className='lay' onClick={() => onBet(false, ItemMarket)}>
+            <td className={` teen-section ${clsnamename} ${liveMatchData?.slug == "AAA" ? "aaabuttonLay" : "lay" }`}>
+              <button className={`${liveMatchData?.slug == "AAA" ? "" : "lay" } text-white `} onClick={() => onBet(false, ItemMarket)}>
                 <span className='odd'>
                   <b>{ItemMarket.l1}</b>
                 </span>

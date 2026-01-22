@@ -455,10 +455,10 @@ class Fancy extends React.Component<
               <div>
                 {!isMobile && (
                   <div className="market-title mt-1">
-                    Over by Over Session Market
+                    {/* Over by Over Session Market */}
                   </div>
                 )}
-                {this.fancyheader("Over by Over Session Market")}
+                {/* {this.fancyheader("Over by Over Session Market")} */}
                 {/* Over by over session here*/}
                 {fancies && (
                   <FancyList
@@ -472,10 +472,10 @@ class Fancy extends React.Component<
               <div>
                 {!isMobile && (
                   <div className="market-title mt-1">
-                    Ball by Ball Session Market
+                    {/* Ball by Ball Session Market */}
                   </div>
                 )}
-                {this.fancyheader("Ball by Ball Session Market")}
+                {/* {this.fancyheader("Ball by Ball Session Market")} */}
 
                 {/* Ball by Ball Session here*/}
                 {fancies && (

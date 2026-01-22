@@ -52,6 +52,16 @@ body {
 
 }
 
+.aaabuttonBack{
+  background: #000000 !important; 
+  color: white !important;
+}
+.aaabuttonLay{
+  background: #dc3545 !important;
+  color: white !important;
+}
+
+
 .navbar-new {
   display: grid;
   /* row-gap: 15px; */
@@ -2825,7 +2835,7 @@ td.suspendedtd:after {
 .video-overlay {
   position: absolute;
   top: 0;
-  background: rgba(0, 0, 0, 0.4);
+  /* background: rgba(0, 0, 0, 0.4); */
   height: auto;
   left: 0;
   content: '';

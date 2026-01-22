@@ -62,37 +62,29 @@ const LuckSeven = (props: any) => {
 
     let title =
       market.RunnerName == "Red" ? (
-        <span className="card-icon">
-          {" "}
-          <span className={"card-red"}>{"[{"}</span>{" "}
-        </span>
+        // <span className="card-icon">
+        //   {" "}
+        //   <span className={"card-red"}>{"[{"}</span>{" "}
+        // </span>
+         market.RunnerName
       ) : (
         market.RunnerName
       );
     title =
       market.RunnerName == "Black" ? (
-        <span className="card-icon">
-          {" "}
-          <span className={"card-black"}>{"]}"}</span>{" "}
-        </span>
+        title
       ) : (
         title
       );
     let title2 =
       market2.RunnerName == "Red" ? (
-        <span className="card-icon">
-          {" "}
-          <span className={"card-red"}>{"[{"}</span>{" "}
-        </span>
+        market2.RunnerName
       ) : (
         market2.RunnerName
       );
     title2 =
       market2.RunnerName == "Black" ? (
-        <span className="card-icon">
-          {" "}
-          <span className={"card-black"}>{"]}"}</span>{" "}
-        </span>
+        title2
       ) : (
         title2
       );

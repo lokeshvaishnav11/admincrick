@@ -131,6 +131,20 @@ const MatkaPlayAdmin = () => {
 
   //console.log(matkastake, "makrkk");
 
+   const openTime = moment()
+        .tz("Asia/Kolkata")
+        .hour(match.opentime.hour)
+        .minute(match.opentime.minute)
+        .second(0)
+        .format("DD-MM-YYYY hh:mm A");
+    
+      const closeTime = moment()
+        .tz("Asia/Kolkata")
+        .hour(match.closetime.hour)
+        .minute(match.closetime.minute)
+        .second(0)
+        .format("DD-MM-YYYY hh:mm A");
+
   return (
     <div className="container w-100 p-0">
       <div className="card single-match text-center my-2">
@@ -143,12 +157,19 @@ const MatkaPlayAdmin = () => {
             {match?.roundid}
           </h5>
 
-          <p
+          {/* <p
             className="ng-binding mt-1 mb-1"
             style={{ fontSize: "15px", fontWeight: "bold" }}
           >
             {moment().hour(9).minute(0).second(0).format("DD-MM-YYYY hh:mm A")}
-          </p>
+          </p> */}
+           <p className="mb-1 pt-1">
+        <b>Open:</b> {openTime}
+      </p>
+
+      <p className="mb-1">
+        <b>Close:</b> {closeTime}
+      </p>
         </a>
       </div>
 
