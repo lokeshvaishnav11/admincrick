@@ -105,14 +105,16 @@ const MyBetComponent22 = () => {
 
   return (
     <>
-      {getMyAllBet?.length > 0 && (
+     <h6 className="p-2 w-100 m-0 bg-info text-white text-center">
+            Declared Bets
+          </h6>
+      {getMyAllBet?.length > 0 && ( 
+
         <div
           className="table-responsive-new"
           style={{ height: "200px", overflowY: "scroll" }}
         >
-          <h6 className="p-2 w-100 m-0 bg-info text-white text-center">
-            Declared Bets
-          </h6>
+         
           <table className="table coupon-table scorall mybet">
             <thead>
               <tr style={{ background: "#76d68f" }}>
@@ -130,6 +132,7 @@ const MyBetComponent22 = () => {
                 <th>Date</th>
               </tr>
             </thead>
+
             <tbody className="scorall">
               {Object.keys(groupedMyAllBet).map(
                 (runnerName: string, groupIndex: number) => (
@@ -213,9 +216,10 @@ const MyBetComponent22 = () => {
                 )
               )}
             </tbody>
+            
           </table>
         </div>
-      )}
+   )}
     </>
   );
 };

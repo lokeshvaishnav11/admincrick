@@ -266,10 +266,10 @@ const MyBetComponent = () => {
   return (
     <>
       {" "}
-      {getMyAllBet?.length > 0 && (
+    
         <div
           className="table-responsive-new"
-          style={{ height: "200px", overflowY: "scroll" }}
+          style={{ height: getMyAllBet?.length > 0  ? "200px" : "", overflowY: "scroll" }}
         >
           <h6 className="card-title d-inline-block">My Bet</h6>
           <table className="table coupon-table scorall mybet">
@@ -291,20 +291,21 @@ const MyBetComponent = () => {
                 <th className="p-2"> Date</th>
               </tr>
             </thead>
-
+            {getMyAllBet?.length > 0 && (
             <tbody className="scorall">
               {/* ✅ Match Bets Section (unchanged) */}
               <tr>
                 <td
                   colSpan={8}
                   style={{
-                    backgroundColor: "darkgoldenrod",
-                    color: "black",
+                    backgroundColor: "black",
+                    color: "white",
                     padding: "8px 10px",
                     textAlign: "left",
+                    display:"none"
                   }}
                 >
-                  Match Bets
+                  Match Betsb
                 </td>
               </tr>
 
@@ -414,10 +415,10 @@ const MyBetComponent = () => {
                   </React.Fragment>
                 )
               )}
-            </tbody>
+            </tbody>)}
           </table>
         </div>
-      )}
+
     </>
   );
 };

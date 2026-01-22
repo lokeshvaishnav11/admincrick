@@ -381,67 +381,56 @@ const CasinoTitle = (props: any) => {
 
   const onedayteen = () => {
     return (
-      <div className="video-overlay">
-        <div className="videoCards">
-          <div>
-            <div className="mr-20">
-              <p className="m-b-0 text-white">
-                <b>
-                  <span className="">Player A</span>
-                </b>
-              </p>
-              <div className="imgspace d-flex">
-                <img
-                  alt=""
-                  src={`/imgs/casino/cards/${
-                    lastResult.C1 == "1" ? "patti_back" : lastResult.C1
-                  }.png`}
-                />
-
-                <img
-                  alt=""
-                  src={`/imgs/casino/cards/${
-                    lastResult.C3 == "1" ? "patti_back" : lastResult.C3
-                  }.png`}
-                />
-                <img
-                  alt=""
-                  src={`/imgs/casino/cards/${
-                    lastResult.C5 == "1" ? "patti_back" : lastResult.C5
-                  }.png`}
-                />
-              </div>
-            </div>
-            <div className="mr-20">
-              <p className="m-b-0 text-white">
-                <b>
-                  <span className="">Player B</span>
-                </b>
-              </p>
-              <div className="imgspace d-flex">
-                <img
-                  alt=""
-                  src={`/imgs/casino/cards/${
-                    lastResult.C2 == "1" ? "patti_back" : lastResult.C2
-                  }.png`}
-                />
-                <img
-                  alt=""
-                  src={`/imgs/casino/cards/${
-                    lastResult.C4 == "1" ? "patti_back" : lastResult.C4
-                  }.png`}
-                />
-                <img
-                  alt=""
-                  src={`/imgs/casino/cards/${
-                    lastResult.C6 == "1" ? "patti_back" : lastResult.C6
-                  }.png`}
-                />
-              </div>
-            </div>
-          </div>
+      <div className="video-overlay w-100">
+  <div className="videoCards w-100">
+    <div className="d-flex align-items-center justify-content-between w-100">
+      
+      {/* Player A - Left */}
+      <div>
+        <p className="mb-1 text-white">
+          <b>Player A</b>
+        </p>
+        <div className="imgspace d-flex">
+          <img
+            alt=""
+            src={`/imgs/casino/cards/${lastResult.C1 == "1" ? "patti_back" : lastResult.C1}.png`}
+          />
+          <img
+            alt=""
+            src={`/imgs/casino/cards/${lastResult.C3 == "1" ? "patti_back" : lastResult.C3}.png`}
+          />
+          <img
+            alt=""
+            src={`/imgs/casino/cards/${lastResult.C5 == "1" ? "patti_back" : lastResult.C5}.png`}
+          />
         </div>
       </div>
+
+      {/* Player B - Right */}
+      <div className="text-end">
+        <p className="mb-1 text-white">
+          <b>Player B</b>
+        </p>
+        <div className="imgspace d-flex justify-content-end">
+          <img
+            alt=""
+            src={`/imgs/casino/cards/${lastResult.C2 == "1" ? "patti_back" : lastResult.C2}.png`}
+          />
+          <img
+            alt=""
+            src={`/imgs/casino/cards/${lastResult.C4 == "1" ? "patti_back" : lastResult.C4}.png`}
+          />
+          <img
+            alt=""
+            src={`/imgs/casino/cards/${lastResult.C6 == "1" ? "patti_back" : lastResult.C6}.png`}
+          />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
     );
   };
 
@@ -568,9 +557,9 @@ const CasinoTitle = (props: any) => {
 
   const teen20 = () => {
     return (
-      <div className="video-overlay">
-        <div className="videoCards">
-          <div className="">
+      <div className="video-overlay w-100">
+        <div className="videoCards w-100">
+          <div className="d-flex align-items-center justify-content-between w-100 ">
             <div className="mr-20">
               <p className="m-b-0 text-white">
                 <b>
@@ -1115,7 +1104,7 @@ const CasinoTitle = (props: any) => {
   return (
     <div>
       {lastResult && (lastResult.match_id || lastResult.id) && (
-        <div className="video-overlaybox">
+        <div className="video-overlaybox w-100">
           {lastResult.slug == "queen" ||
           lastResult.slug == "card32" ||
           lastResult.slug == "card32b" ||
