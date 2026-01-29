@@ -6,7 +6,7 @@ import moment from 'moment'
 import MatchOdds from './match-odds'
 import PlaceBetBox from './place-bet-box'
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
-import { selectBetCount } from '../../../redux/actions/bet/betSlice'
+import { selectBetCount, setBookMarketList } from '../../../redux/actions/bet/betSlice'
 import Fancy from './fancy'
 import { useWebsocketUser } from '../../../context/webSocketUser'
 import MyBetComponent22 from './my-bet-component22'
@@ -14,6 +14,7 @@ import { selectUserData } from '../../../redux/actions/login/loginSlice'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import { CustomLink } from '../../_layout/elements/custom-link'
+import betService from '../../../services/bet.service'
 
 const MatchDetailWrapper = (props: any) => {
   const dispatch = useAppDispatch()
@@ -29,6 +30,24 @@ const MatchDetailWrapper = (props: any) => {
   //   }
   // }, [])
 const shared = useParams().share
+
+React.useEffect(() => {
+   betService
+          .getBets(props.matchId)
+          .then((bets) => {
+            //console.log(bets.data, "chech bet data");
+            bets &&
+              bets.data &&
+              bets.data.data &&
+              // setMyAllBet(bets.data.data.bets);
+            // dispatch(setbetlist(bets.data.data.bets));
+            dispatch(setBookMarketList(bets.data.data.odds_profit));
+            // dispatch(setBetCount(bets.data.data.bets.length));
+          })
+          .catch((e) => {
+            console.log(e.stack);
+          });
+}, [props.matchId]);
 
 
   return (

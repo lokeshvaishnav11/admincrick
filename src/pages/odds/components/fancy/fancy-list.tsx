@@ -157,7 +157,7 @@ export const FancyList = React.memo(
                                 : "red"
                             }
                           >
-                            {getMarketBook[fancy.marketId]}
+                            {/* {getMarketBook[fancy.marketId]} */}
                           </span>
                         )}
                         {/* {updatedFancy?.rem && <p className='tx-red'>{updatedFancy?.rem}</p>} */}
