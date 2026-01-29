@@ -84,12 +84,12 @@ const ClientBetsUser = () => {
   const [marketData, setmarketData] = React.useState<MatchItem[]>([]);
   const [marketonlymatch, setMarketonlymatch] = React.useState<MatchItem[]>([]);
   const [marketonlyf, setMarketonlyf] = React.useState<MatchItem[]>([]);
-
+  const userState = useAppSelector(selectUserData);
   const [marketData2, setmarketData2] = React.useState<MatchItem[]>([]);
   const [sendid, setSendid] = React.useState(null);
   const [stack, setStack] = React.useState<any[]>([]);
   //  const userState = useAppSelector(selectUserData)
-
+  const [shared, setShared] = React.useState<any>();
   const dispatch = useAppDispatch();
 
   const maid = useParams().matchId;
@@ -174,16 +174,16 @@ const ClientBetsUser = () => {
 
       setmarketData2(filtered);
     });
-  }, [maid]);
+  }, [maid , userState , shared]);
 
   // //console.log(marketData, "fmsjnsdjfksgdfjgksd");
 
   const [ledgerData, setLedgerData] = React.useState([]);
 
-  const userState = useAppSelector(selectUserData);
+  
   // //console.log(userState, "isususus");
 
-  const [shared, setShared] = React.useState<any>();
+ 
 
   React.useEffect(() => {
     // const userState = useAppSelector<{ user: User }>(selectUserData);
@@ -742,7 +742,7 @@ const ClientBetsUser = () => {
                                 color: "white",
                               }}
                             >
-                              {totalPL}
+                              {totalPL * (shared * 0.01) }
                             </span>
                             <span className="badge badge-light float-right ng-binding ng-scope">
                               {/* {bet?.declared === 1 && ( */}
@@ -881,7 +881,7 @@ const ClientBetsUser = () => {
                                                   : "text-green-500"
                                               }`}
                                             >
-                                              {bet?.profitLoss}
+                                              {bet?.profitLoss * (shared * 0.01) }
                                             </td>
                                           )}
 
@@ -969,7 +969,7 @@ const ClientBetsUser = () => {
                                         {itemKey}
                                       </span>
                                       <span className={`badge-value ms-1 `}>
-                                        {-value}
+                                        {-value * (shared * 0.01)}
                                       </span>
                                     </div>
                                   );
