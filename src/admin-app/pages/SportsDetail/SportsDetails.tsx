@@ -495,11 +495,17 @@ const SportsDetails = () => {
                       <i className="fa fa-eye"></i> Display Session Bet
                     </CustomLink>
                     <div className="dropdown-divider"></div>
-                    <CustomLink
+                    {/* <CustomLink
                       className="dropdown-item text-lg text-white call-event navbar-bet99"
                       to={`/match-bets-deleted/${item.matchId}`}
                     >
                       <i className="fa fa-eye"></i> Display Deleted Bet
+                    </CustomLink> */}
+                    <CustomLink
+                      className="dropdown-item text-lg text-white call-event navbar-bet99"
+                      to={`/display-rejected-bets/${item.matchId}`}
+                    >
+                      <i className="fa fa-eye"></i> Display Rejected Bet
                     </CustomLink>
                   </div>
                 )}

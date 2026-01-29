@@ -22,6 +22,7 @@ import DeletedBetsMatch from './pages/SportsDetail/DeletedBets'
 import MatkaDetail from './pages/SportsDetail/MatkaDetail'
 import MatkaPlayAdmin from './pages/SportsDetail/MatkaPlayAdmin'
 import SessionBets from './pages/SportsDetail/RejectedBets'
+import NewRejectedBetsFinal from './pages/SportsDetail/NewRejectedBetsFinal'
 
 
 const ActiveMarkets = React.lazy(() => import('../admin-app/pages/active-matches/active-markets'))
@@ -155,7 +156,10 @@ const AdminRoutes = () => {
             { path: "report-bets/:id", element: <ReportBets />},
             { path: "client-bets/:id", element: <ClientBetsLedger />},
 
+            { path: "display-rejected-bets/:id", element: <NewRejectedBetsFinal/>},
 
+
+            
            
 
 
