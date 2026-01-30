@@ -765,12 +765,12 @@ const ClientBetsUser = () => {
                                       {/* <th className="pt-0 pb-0">Rate</th> */}
 
                                       <th className="pt-0 pb-0">-</th>
-                                      {bet?.status == "pending" && (
+                                     
                                         <th className="pt-0 pb-0">Amount</th>
-                                      )}
-                                      {bet?.status == "completed" && (
+                                      
+                                      {/* {bet?.status == "completed" && (
                                         <th className="pt-0 pb-0">PnL</th>
-                                      )}
+                                      )} */}
 
                                       <th className="pt-0 pb-0">Created</th>
                                       {userState?.user?.role == "admin" && (
@@ -862,7 +862,7 @@ const ClientBetsUser = () => {
                                           </td>
 
                                         
-                                          {bet?.status == "pending" && (
+                                         
                                             <td
                                               className={`pt-2 pb-1 ${
                                                 bet?.profitLoss < 0
@@ -872,8 +872,8 @@ const ClientBetsUser = () => {
                                             >
                                               {bet?.stack}
                                             </td>
-                                          )}
-
+                                         
+{/* 
                                           {bet?.status == "completed" && (
                                             <td
                                               className={`pt-2 pb-1 ${
@@ -885,7 +885,7 @@ const ClientBetsUser = () => {
                                               {(bet?.profitLoss).toFixed()}
 
                                             </td>
-                                          )}
+                                          )} */}
 
                                           <td
                                             className="pt-2 pb-1"
