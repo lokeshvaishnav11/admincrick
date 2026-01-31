@@ -1567,7 +1567,7 @@ const Header = () => {
                                 </CustomLink>
                               </li>
 
-                              <li className="border-b-4 border-black pb-2">
+                              {/* <li className="border-b-4 border-black pb-2">
                                 <CustomLink
                                   // onClick={() => setDropdownOpen4(!dropdownOpen4)}
                                   // to="/sports-list/active-matches"
@@ -1585,7 +1585,7 @@ const Header = () => {
                                     {"Matka Markets"}
                                   </b>
                                 </CustomLink>
-                              </li>
+                              </li> */}
 
                               <li className="border-b-4 border-black pb-2">
                                 <CustomLink
