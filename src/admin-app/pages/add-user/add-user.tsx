@@ -568,14 +568,14 @@ const AddUser = () => {
                   {thetype == "sadmin"
                     ? "Sub Admin"
                     : thetype == "suadmin"
-                    ? "Admin"
-                    : thetype == "smdl"
-                    ? "Master Agent"
-                    : thetype == "mdl"
-                    ? "Super Agent Master"
-                    : thetype == "dl"
-                    ? "Agent Master"
-                    : "Client"}
+                      ? "Admin"
+                      : thetype == "smdl"
+                        ? "Master Agent"
+                        : thetype == "mdl"
+                          ? "Super Agent Master"
+                          : thetype == "dl"
+                            ? "Agent Master"
+                            : "Client"}
                 </p>
 
                 <p className="btn btn-diamond">
@@ -655,7 +655,7 @@ const AddUser = () => {
                               defaultValue={""}
                               type="text"
                               className="form-control"
-                              // required
+                            // required
                             />
                             <span
                               id="username-error"
@@ -675,7 +675,7 @@ const AddUser = () => {
                       <div className="col-md-6">
                         <div className="form-group">
                           <label htmlFor="password">Password</label>
-                          <input
+                          {/* <input
                             maxLength={8}
                             placeholder="Password"
                             id="password"
@@ -684,7 +684,16 @@ const AddUser = () => {
                             value={"Abcd1122"}
                             className="form-control"
                             // required
+                          /> */}
+                          <input
+                            maxLength={8}
+                            placeholder="Password"
+                            id="password"
+                            type="text"          // 👈 password dikhai dega
+                            {...register("password")}
+                            className="form-control"
                           />
+
                           {errors?.password && (
                             <span id="password-error" className="error">
                               {errors.password.message}
@@ -915,7 +924,7 @@ const AddUser = () => {
                             step="0.01"
                             type="number"
                           />
-                        
+
                         </div>
                       </div>
 
@@ -949,7 +958,7 @@ const AddUser = () => {
                               type="number"
                               className="form-control"
                               min="0"
-                              // required
+                            // required
                             />
                             {errors?.exposerLimit && (
                               <span id="exposerlimit-error" className="error">
@@ -976,16 +985,16 @@ const AddUser = () => {
                             <th />
                             {sportListState.sports.map((sports: ISport) =>
                               sports.sportId === 1 ||
-                              sports.sportId === 2 ||
-                              sports.sportId === 4 ? (
+                                sports.sportId === 2 ||
+                                sports.sportId === 4 ? (
                                 <th className="" key={sports._id}>
                                   {
                                     // sports.name === "Cricket" ? "Casino %" :
                                     sports.name === "Soccer"
                                       ? "Match Commission (%)"
                                       : sports.name === "Tennis"
-                                      ? "Session Commission (%)"
-                                      : ""
+                                        ? "Session Commission (%)"
+                                        : ""
                                   }
                                 </th>
                               ) : (
@@ -1074,15 +1083,15 @@ const AddUser = () => {
                                               ?.ownRatio;
                                           ownRatio
                                             ? setValue(
-                                                `partnershipOur.${sportId}`,
-                                                ownRatio - e.target.value
-                                              )
+                                              `partnershipOur.${sportId}`,
+                                              ownRatio - e.target.value
+                                            )
                                             : setValue(
-                                                `partnershipOur.${sportId}`,
-                                                getValues(
-                                                  `partnershipOur.${sportId}`
-                                                )
-                                              );
+                                              `partnershipOur.${sportId}`,
+                                              getValues(
+                                                `partnershipOur.${sportId}`
+                                              )
+                                            );
                                         },
                                       })}
                                       id={`partnership.${sportId}`}
@@ -1148,16 +1157,16 @@ const AddUser = () => {
                           <th />
                           {sportListState.sports?.map((sports: any) =>
                             sports.sportId === 1 ||
-                            sports.sportId === 2 ||
-                            sports.sportId === 4 ? (
+                              sports.sportId === 2 ||
+                              sports.sportId === 4 ? (
                               <th key={sports._id}>
                                 {sports.name === "Cricket"
                                   ? "Casino "
                                   : sports.name === "Soccer"
-                                  ? "Match"
-                                  : sports.name === "Tennis"
-                                  ? "Fancy "
-                                  : ""}
+                                    ? "Match"
+                                    : sports.name === "Tennis"
+                                      ? "Fancy "
+                                      : ""}
                               </th>
                             ) : (
                               <th key={sports._id} />
@@ -1167,9 +1176,8 @@ const AddUser = () => {
                       </thead>
                       <tbody>
                         <tr
-                          className={` ${
-                            thetype === "sadmin" ? "d-bl" : "d-none"
-                          }`}
+                          className={` ${thetype === "sadmin" ? "d-bl" : "d-none"
+                            }`}
                         >
                           <td></td>
                           {sportListState.sports?.map(({ _id, sportId }) =>
@@ -1183,9 +1191,8 @@ const AddUser = () => {
                           )}
                         </tr>
                         <tr
-                          className={` ${
-                            thetype === "sadmin" ? "d-nonefff" : "d-none"
-                          }`}
+                          className={` ${thetype === "sadmin" ? "d-nonefff" : "d-none"
+                            }`}
                         >
                           <td>Provide Min Bet</td>
                           {sportListState.sports?.map(({ _id, sportId }) =>
@@ -1213,9 +1220,8 @@ const AddUser = () => {
                           )}
                         </tr>
                         <tr
-                          className={` ${
-                            thetype === "sadmin" ? "d-nonefff" : "d-none"
-                          }`}
+                          className={` ${thetype === "sadmin" ? "d-nonefff" : "d-none"
+                            }`}
                         >
                           <td>Max Bet</td>
                           {sportListState.sports?.map(({ _id, sportId }) =>
@@ -1229,9 +1235,8 @@ const AddUser = () => {
                           )}
                         </tr>
                         <tr
-                          className={` ${
-                            thetype === "sadmin" ? "d-nofffne" : "d-none"
-                          }`}
+                          className={` ${thetype === "sadmin" ? "d-nofffne" : "d-none"
+                            }`}
                         >
                           {/* c - 10000
                           fa - 50000
@@ -1248,7 +1253,7 @@ const AddUser = () => {
                                   placeholder={""}
                                   max={userData?.userSetting?.[sportId].maxBet}
                                   defaultValue={
-                                    sportId == 1 ? 200000	 : sportId == 2 ? 50000 : 10000
+                                    sportId == 1 ? 200000 : sportId == 2 ? 50000 : 10000
                                   }
                                   // disabled={isPartnership}
                                   disabled
@@ -1264,9 +1269,8 @@ const AddUser = () => {
                           )}
                         </tr>
                         <tr
-                          className={` ${
-                            thetype === "sadmin" ? "d-nonfffe" : "d-none"
-                          }`}
+                          className={` ${thetype === "sadmin" ? "d-nonfffe" : "d-none"
+                            }`}
                         >
                           <td>Delay</td>
                           {sportListState.sports?.map(({ _id, sportId }) =>
