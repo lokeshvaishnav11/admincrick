@@ -353,11 +353,22 @@ const MatkaPlayAdmin = () => {
                       : "bg-success"
                   }
                 >
-                  <td className="text-center text-nowrap">{index + 1}</td>
+                  <td className="text-center">{index + 1}</td>
 
                   {userState.user.role !== RoleType.user && (
-                    <td>{bet.username}</td>
+                    <td style={{ whiteSpace: "normal", wordBreak: "break-word" }}>
+                      {bet?.parentData
+                        ?.slice(
+                          bet?.parentData.indexOf(userState.user.username) + 1
+                        )
+                        .join("/")}
+                      /{bet?.username}
+                    </td>
                   )}
+
+
+
+
 
                   <td className="text-center text-nowrap">{bet.roundid}</td>
 
@@ -370,9 +381,11 @@ const MatkaPlayAdmin = () => {
                   <td className="text-center text-nowrap">{bet.bettype}</td>
 
                   <td className="text-center text-nowrap">
-                    {moment
-                      .utc(bet.betClickTime)
-                      .format("DD/MM/YYYY hh:mm:ss A")}
+                    {
+                      moment(bet.createdAt)
+                        .tz("Asia/Kolkata")
+                        .format("DD/MM/YYYY hh:mm:ss A")
+                    }
                   </td>
                 </tr>
               ))
