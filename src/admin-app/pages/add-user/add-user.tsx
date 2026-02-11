@@ -33,8 +33,8 @@ const validationSchema = Yup.object().shape({
   // transactionPassword: Yup.string().default('123456').required('Transaction Password is required'),
   password: Yup.string()
     .required("Password is required")
-    .min(8, "Password must be at least 6 characters")
-    .matches(/^[A-Z][a-z0-9_-]{3,19}$/, "Must Contain One Uppercase"),
+    .min(8, "Password must be at least 8 characters"),
+    // .matches(/^[A-Z][a-z0-9_-]{3,19}$/, "Must Contain One Uppercase"),
   // passwordConfirmation: Yup.string()
   //   .required('Confirm password is required')
   //   .oneOf([Yup.ref('password')], 'Passwords must match'),
@@ -176,6 +176,7 @@ const AddUser = () => {
   // //console.log(sendcode, "the first code");
 
   const [sendcode, setSendcode] = React.useState("");
+  const [sendpass, setSendpass] = React.useState("");
 
   React.useEffect(() => {
     let fword = "";
@@ -220,7 +221,7 @@ const AddUser = () => {
     resolver: yupResolver(validationSchema, { context: { maxBalance } }),
     mode: "onChange",
     defaultValues: {
-      password: "Abcd1122",
+      // password: "Abcd1122",
       transactionPassword: "123456", // Automatically sets transaction password
     },
   });
@@ -557,6 +558,38 @@ const AddUser = () => {
     //console.log(uplineParent, "Currently selected upline parent data");
   }, [uplineParent]);
 
+
+  const generatePassword = () => {
+    const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lower = "abcdefghijklmnopqrstuvwxyz";
+    const numbers = "0123456789";
+    const all = upper + lower + numbers;
+
+    let password =
+      upper[Math.floor(Math.random() * upper.length)] +
+      lower[Math.floor(Math.random() * lower.length)] +
+      numbers[Math.floor(Math.random() * numbers.length)];
+
+    for (let i = 3; i < 8; i++) {
+      password += all[Math.floor(Math.random() * all.length)];
+    }
+
+    let finalPassword = password
+      .split("")
+      .sort(() => Math.random() - 0.5)
+      .join("");
+
+    setValue("password", finalPassword, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+  };
+
+
+  React.useEffect(() => {
+    generatePassword();
+  }, [])
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -686,13 +719,14 @@ const AddUser = () => {
                             // required
                           /> */}
                           <input
-                            maxLength={8}
                             placeholder="Password"
                             id="password"
-                            type="text"          // 👈 password dikhai dega
+                            type="text"      // admin ko dikhana hai
                             {...register("password")}
                             className="form-control"
+                            // readOnly
                           />
+
 
                           {errors?.password && (
                             <span id="password-error" className="error">
