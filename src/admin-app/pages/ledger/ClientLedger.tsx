@@ -2,6 +2,9 @@ import "./ledger.css";
 import betService from "../../../services/bet.service";
 import { AxiosResponse } from "axios";
 import React from "react";
+import { useFormState } from "react-hook-form";
+import { useAppSelector } from "../../../redux/hooks";
+import { selectUserData } from "../../../redux/actions/login/loginSlice";
 
 interface LedgerItem {
   _id: string;
@@ -10,10 +13,12 @@ interface LedgerItem {
   username: string;
   createdAt: string;
   updown: number;
+  ChildId: string
 }
 const ClientLedger = () => {
   const [tableData, setTableData] = React.useState<LedgerItem[]>([]);
   const [optionuser, setOptionuser] = React.useState<string>("all");
+  const userState = useAppSelector(selectUserData);
   //console.log(optionuser, "optionuser");
 
   React.useEffect(() => {
@@ -29,10 +34,14 @@ const ClientLedger = () => {
   const getProcessedRows = () => {
     let balance = 0;
 
+    // const isChildMatch = item.ChildId === userState.user._id;
+
     const filteredData =
       optionuser === "all"
         ? tableData
-        : tableData.filter((item) => item.username === optionuser);
+        : tableData.filter((item) => item?.ChildId === optionuser);
+
+    console.log(filteredData, "GHJGHJGH")
 
     const result: {
       id: string;
@@ -43,22 +52,114 @@ const ClientLedger = () => {
       date: string;
     }[] = [];
 
+    // filteredData.forEach((item: any) => {
+    //   const money = item.umoney;
+    //   const isChildMatch = item.ParentId === userState.user._id;
+    //   const isSettled = item.settled === true;
+    //   if( (! isSettled || ( optionuser != "all" || isChildMatch)) && (isSettled || !isChildMatch)){
+    //   const credit = money > 0 ? money : 0;
+    //   const debit = money < 0 ? money : 0; // keep -ve as-is
+    //   balance += money;
+
+    //   result.push({
+    //     id: item._id,
+    //     credit,
+    //     debit,
+    //     balance,
+    //     narration: item.narration,
+    //     date: item.createdAt,
+    //   });
+    // }
+    // });
+
     filteredData.forEach((item: any) => {
+      // const money = item.umoney;
+      // const isChildMatch = item.ParentId === userState.user._id;
+      // const isSettled = item.settled === true;
+
+      // let allow = false;
+
+      // if (optionuser === "all" && ! isSettled) {
+      //   // all users ka data
+
+      //   allow = true;
+      // } 
+      // // else if (optionuser === "child") {
+      // //   // sirf child ka data
+      // //   allow = isChildMatch;
+      // // } 
+      // else {
+      //   if(isSettled && optionuser !== "all" ){
+      //    allow =true
+
+
+      //   }
+      //   // default / self user
+      //   // allow = !isChildMatch;
+      // }
+
+      // if(isSettled && optionuser == "all" && !isChildMatch ){
+      //   allow = true
+      // }
       const money = item.umoney;
+      const isChildMatch = item.ParentId === userState.user._id;
+      const isSettled = item.settled === true;
 
-      const credit = money > 0 ? money : 0;
-      const debit = money < 0 ? money : 0; // keep -ve as-is
-      balance += money;
+      let allow = false;
 
-      result.push({
-        id: item._id,
-        credit,
-        debit,
-        balance,
-        narration: item.narration,
-        date: item.createdAt,
-      });
+      if (optionuser === "all") {
+        if (isChildMatch) {
+          // child user → sirf unsettled
+          if (item.ParentId == item.ChildId) {
+            allow = true
+          } else {
+            allow = !isSettled;
+
+          }
+        } else {
+          // non-child → sab dikhana hai
+          allow = true;
+        }
+      } else {
+        // optionuser != all → settled + unsettled sab
+        allow = true;
+      }
+
+      // if (allow) {
+      //   const credit = money > 0 ? money : 0;
+      //   const debit = money < 0 ? money : 0;
+
+      //   balance += money;
+
+      //   result.push({
+      //     id: item._id,
+      //     credit,
+      //     debit,
+      //     balance,
+      //     narration: item.narration,
+      //     date: item.createdAt,
+      //   });
+      // }
+
+
+      // settled condition (agar chahiye to yahin control karo)
+      if (allow) {
+        const credit = money > 0 ? money : 0;
+        const debit = money < 0 ? money : 0;
+
+        balance += money;
+
+        result.push({
+          id: item._id,
+          credit,
+          debit,
+          balance,
+          narration: item.narration,
+          date: item.createdAt,
+        });
+      }
     });
+
 
     // Reverse so [0][2] is on top and [0][0] at bottom
     return result.reverse();
@@ -90,7 +191,7 @@ const ClientLedger = () => {
             }, new Map())
             .values()
         ).map((row: any, index) => (
-          <option key={index} value={row.client}>
+          <option key={index} value={row.ChildId}>
             {row.username}
           </option>
         ))}
@@ -196,9 +297,13 @@ const ClientLedger = () => {
                           >
                             🏆
                           </span>
-                          <span className="small p-0" style={{ zIndex: 2 }}>
+                          <span
+                            className={`small p-0 z-[2] ${row.narration === "Settlement" ? "bg-yellow-400" : ""
+                              }`}
+                          >
                             {row.narration}
                           </span>
+
                         </td>
                       </tr>
                     ))}
