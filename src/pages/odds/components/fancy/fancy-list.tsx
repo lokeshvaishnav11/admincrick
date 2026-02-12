@@ -118,7 +118,7 @@ export const FancyList = React.memo(
                           }}
                         >
                           {fancy.fancyName}
-                          {isMobile && (
+                          {/* {isMobile && (
                             <Limitinfo
                               nameString={fancy.marketId}
                               min={
@@ -132,7 +132,7 @@ export const FancyList = React.memo(
                               // min={getCurrentMatch.inPlayFancyMinLimit}
                               // max={getCurrentMatch.inPlayFancyMaxLimit}
                             />
-                          )}
+                          )} */}
                         </span>
                         {getMarketBook && (
                           <span
