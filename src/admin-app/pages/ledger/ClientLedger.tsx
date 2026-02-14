@@ -192,8 +192,7 @@ const ClientLedger = () => {
             .values()
         ).map((row: any, index) => (
           <option key={index} value={row.ChildId}>
-            {row.username}
-          </option>
+            {row.username}/({row.cname})          </option>
         ))}
       </select>
 
