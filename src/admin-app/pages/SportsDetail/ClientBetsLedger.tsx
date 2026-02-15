@@ -1319,7 +1319,7 @@ const ClientBetsLedger = () => {
                       </td>
                       <td className="pt-1 pb-1">
                         <span
-                          ng-class="totalPandL.net_p_l_odds > 0 ? 'text-success' : 'text-danger'"
+                          ng-class="totalPandL.net_p_l_odds > 0 ?   'text-danger' :'text-success'"
                           className="ng-binding text-success"
                         >
                           {ledgerTotal?.match?.toFixed(2)}
@@ -1327,7 +1327,7 @@ const ClientBetsLedger = () => {
                       </td>
                       <td className="pt-1 pb-1">
                         <span
-                          ng-class="totalPandL.net_p_l_session > 0 ? 'text-success' : 'text-danger'"
+                          ng-class="totalPandL.net_p_l_session > 0 ? 'text-danger' :'text-success'"
                           className="ng-binding text-danger"
                         >
                           {ledgerTotal?.session?.toFixed(2)}
@@ -1335,7 +1335,7 @@ const ClientBetsLedger = () => {
                       </td>
                       <td className="pt-1 pb-1">
                         <span
-                          ng-class="totalPandL.total_pandl > 0 ? 'text-success' : 'text-danger'"
+                          ng-class="totalPandL.total_pandl > 0 ? 'text-danger' :'text-success'"
                           className="ng-binding text-success"
                         >
                           {(ledgerTotal?.match + ledgerTotal?.session).toFixed(
@@ -1369,7 +1369,7 @@ const ClientBetsLedger = () => {
                       </td>
                       <td className="pt-1 pb-1">
                         <span
-                          ng-class="totalPandL.total_amount > 0 ? 'text-success' : 'text-danger'"
+                          ng-class="totalPandL.total_amount > 0 ? 'text-danger' :'text-success'"
                           className="ng-binding text-danger"
                         >
                           {ledgerTotal?.gTotal?.toFixed(2)}
@@ -1377,7 +1377,7 @@ const ClientBetsLedger = () => {
                       </td>
                       <td className="pt-1 pb-1">
                         <span
-                          ng-class="totalPandL.my_share > 0 ? 'text-success' : 'text-danger'"
+                          ng-class="totalPandL.my_share > 0 ? 'text-danger' :'text-success'"
                           className="ng-binding text-danger"
                         >
                           {ledgerTotal?.upDownShare?.toFixed(2)}
@@ -1385,7 +1385,7 @@ const ClientBetsLedger = () => {
                       </td>
                       <td className="pt-1 pb-1">
                         <span
-                          ng-class="totalPandL.net_amt > 0 ? 'text-success' : 'text-danger'"
+                          ng-class="totalPandL.net_amt > 0 ? 'text-danger' :'text-success'"
                           className="ng-binding text-danger"
                         >
                           {(
