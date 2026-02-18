@@ -422,44 +422,8 @@ const AdminDashboard = () => {
                         </CustomLink>
                       </div>
                     </div>
-                    <div className="col-3 col-md-2 event-row p-0 float-left mt-3">
-                      <div
-                        style={{ border: "none" }}
-                        className="card-body m-0 p-0"
-                      >
-                        < div className="block">
-                          <img
-                            className="casino_img"
-                            src={"imgs/ludo-9xpro.png"}
-                            style={{
-                              borderRadius: "10px",
-                              // width: "150px",
-                            }}
-                            onClick={handleClick}
-                          />
-                          <span className="casino_img_text">Ludo</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-3 col-md-2 event-row p-0 float-left mt-3">
-                      <div
-                        style={{ border: "none" }}
-                        className="card-body m-0 p-0"
-                      >
-                        <div className="block">
-                          <img
-                            className="casino_img"
-                            src={"imgs/kabaddi-img.png"}
-                            style={{
-                              borderRadius: "10px",
-                              // width: "150px",
-                            }}
-                             onClick={handleClick}
-                          />
-                          <span className="casino_img_text">Kabbadi</span>
-                        </div>
-                      </div>
-                    </div>
+                 
+                  
                   </div>
                 </div>
 

@@ -167,7 +167,9 @@ const Odds = () => {
         <iframe
           style={{ width: "100%", height: "auto" }}
         
-          src={`https://score.akamaized.uk/?id=${currentMatch?.matchId}`}
+          // src={`https://score.akamaized.uk/?id=${currentMatch?.matchId}`}
+                     src={`https://fancypanel.xyz/pages/scorecardcricket/${currentMatch?.matchId}`}
+
         ></iframe>
       );
   };
