@@ -67,7 +67,7 @@
 //                 </div> */}
 //                 <div className='featured-box-login featured-box-secundary default log-fld'>
 //                 <div className='log-logo m-b-20 text-center'>
-//                   <img src='/imgs/logo.png' className='logo-login' style={{ maxWidth: "250px", maxHeight: "100px" }} />
+//                   <img src='/imgs/clogo.png' className='logo-login' style={{ maxWidth: "250px", maxHeight: "100px" }} />
 //                 </div>
 //                   <form
 //                     onSubmit={(e) => handleSubmit(e)}
@@ -195,7 +195,7 @@ const Login = () => {
                 <div className='featured-box-login featured-box-secundary default log-fld'>
                   <div className='log-logo m-b-20 text-center'>
                     <img
-                      src='/imgs/logo.png'
+                      src='/imgs/clogo.png'
                       className='logo-login'
                       style={{ maxWidth: '250px', maxHeight: '100px' }}
                     />
