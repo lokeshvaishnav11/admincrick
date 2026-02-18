@@ -164,13 +164,30 @@ const Odds = () => {
       );
     else if (currentMatch)
       return (
+    <div>
         <iframe
-          style={{ width: "100%", height: "auto" }}
+          style={{ width: "100%", height: "auto",minHeight:"269px" }}
         
           // src={`https://score.akamaized.uk/?id=${currentMatch?.matchId}`}
                      src={`https://fancypanel.xyz/pages/scorecardcricket/${currentMatch?.matchId}`}
 
         ></iframe>
+
+        </div>
+
+//     <div style={{ position: "relative", width: "100%", paddingTop: "56.25%" }}>
+//   <iframe
+//     style={{
+//       position: "absolute",
+//       top: 0,
+//       left: 0,
+//       width: "100%",
+//       height: "100%",
+//       border: "none",
+//     }}
+//     src={`https://fancypanel.xyz/pages/scorecardcricket/${currentMatch?.matchId}`}
+//   ></iframe>
+// </div>
       );
   };
 
