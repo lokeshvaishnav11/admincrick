@@ -341,7 +341,7 @@ const AddUser = () => {
       return;
     }
 
-    if (Number(data.scom) > 4 || Number(data.scom) < 0) {
+    if (Number(data.scom) > 4.5 || Number(data.scom) < 0) {
       toast.error("Session commission must be between 0 and 4");
       return;
     }
@@ -579,7 +579,7 @@ const AddUser = () => {
       .sort(() => Math.random() - 0.5)
       .join("");
 
-    setValue("password", finalPassword, {
+    setValue("password", "Abcd1122" ,{
       shouldDirty: true,
       shouldValidate: true,
     });
@@ -964,7 +964,7 @@ const AddUser = () => {
 
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label htmlFor="scom">Session Commision(≤4%)</label>
+                          <label htmlFor="scom">Session Commision(≤4.5%)</label>
                           <input
                             className="form-control"
                             placeholder="S Comm Limit"
@@ -972,7 +972,7 @@ const AddUser = () => {
                             id="scom"
                             defaultValue={0}
                             min="0"
-                            max="4"
+                            max="4.5"
                             step="0.01"
                             // required
                             type="number"
