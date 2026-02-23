@@ -72,7 +72,7 @@ const MatchesPage = () => {
             (event, index, self) =>
               index ===
               self.findIndex(
-                (e) => e.matchId === event.matchId 
+                (e) => e.matchId === event.matchId && event.seriesId != 1
               )
             // index === self.findIndex((e) => e.matchId === event.matchId)
           );
