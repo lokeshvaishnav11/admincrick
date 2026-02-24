@@ -68,13 +68,19 @@ const MatchesPage = () => {
             return dateA - dateB;
           });
 
-          const uniqueEvents = sortedMatches.filter(
-            (event, index, self) =>
-              index ===
-              self.findIndex(
-                (e) => e.matchId === event.matchId && event.seriesId != 1
-              )
-            // index === self.findIndex((e) => e.matchId === event.matchId)
+          // const uniqueEvents = sortedMatches.filter(
+          //   (event, index, self) =>
+          //     index ===
+          //     self.findIndex(
+          //       (e) => e.matchId === event.matchId && event.seriesId != 1
+          //     )
+          //   // index === self.findIndex((e) => e.matchId === event.matchId)
+          // );
+
+            const uniqueEvents = Array.from(
+            new Map(
+              sortedMatches.map((item: any) => [String(item.matchId), item])
+            ).values()
           );
 
           const now = new Date();
