@@ -159,61 +159,61 @@ const Odds = () => {
     setIsFullScore(prev => !prev);
   };
 
-  // const scoreBoard = () => {
-  //   if (currentMatch) {
-  //   return (
-  //     <div style={{ position: "relative", width: "100%" }}>
-  //       {/* Full Score Icon */}
-  //       <div
-  //         onClick={toggleFullScore}
-  //         style={{
-  //           position: "absolute",
-  //           top: "15px",
-  //           right: "8px",
-  //           zIndex: 10,
-  //           cursor: "pointer",
-  //           background: "#000",
-  //           color: "#fff",
-  //           padding: "6px 10px",
-  //           borderRadius: "4px",
-  //           fontSize: "12px"
-  //         }}
-  //       >
-  //         {isFullScore ? "Minimize" : "Full Score"}
-  //       </div>
+  const scoreBoard = () => {
+    if (currentMatch) {
+    return (
+      <div style={{ position: "relative", width: "100%" }}>
+        {/* Full Score Icon */}
+        <div
+          onClick={toggleFullScore}
+          style={{
+            position: "absolute",
+            top: "15px",
+            right: "8px",
+            zIndex: 10,
+            cursor: "pointer",
+            background: "#000",
+            color: "#fff",
+            padding: "6px 10px",
+            borderRadius: "4px",
+            fontSize: "12px"
+          }}
+        >
+          {isFullScore ? "Minimize" : "Full Score"}
+        </div>
 
-  //       <iframe
-  //         style={{
-  //           width: "100%",
-  //           height: "auto",
-  //           minHeight: isFullScore ? "550px" : "269px",
-  //           transition: "min-height 0.3s ease"
-  //         }}
-  //         src={`https://fancypanel.xyz/pages/scorecardcricket/${currentMatch?.matchId}`}
-  //       />
-  //     </div>
-  //   );
-  // }
-  // };
+        <iframe
+          style={{
+            width: "100%",
+            height: "auto",
+            minHeight: isFullScore ? "550px" : "269px",
+            transition: "min-height 0.3s ease"
+          }}
+          src={`https://fancypanel.xyz/pages/scorecardcricket/${currentMatch?.matchId}`}
+        />
+      </div>
+    );
+  }
+  };
 
   
-  const scoreBoard = () => {
-    if (currentMatch && currentMatch.sportId == "4333")
-      return (
-        <Score
-          matchId={currentMatch?.matchId}
-          isT10={currentMatch?.isT10 || false}
-        />
-      );
-    else if (currentMatch)
-      return (
-        <iframe
-          style={{ width: "100%", height: "auto" }}
-          // src={`https://card.hr08bets.in/api/getScoreData?event_id=${currentMatch?.matchId}`}
-          src={`https://score.akamaized.uk/?id=${currentMatch?.matchId}`}
-        ></iframe>
-      );
-  };
+  // const scoreBoard = () => {
+  //   if (currentMatch && currentMatch.sportId == "4333")
+  //     return (
+  //       <Score
+  //         matchId={currentMatch?.matchId}
+  //         isT10={currentMatch?.isT10 || false}
+  //       />
+  //     );
+  //   else if (currentMatch)
+  //     return (
+  //       <iframe
+  //         style={{ width: "100%", height: "auto" }}
+  //         // src={`https://card.hr08bets.in/api/getScoreData?event_id=${currentMatch?.matchId}`}
+  //         src={`https://score.akamaized.uk/?id=${currentMatch?.matchId}`}
+  //       ></iframe>
+  //     );
+  // };
 
   const t10Tv = (height: string) => {
     if (currentMatch && currentMatch.isT10)
