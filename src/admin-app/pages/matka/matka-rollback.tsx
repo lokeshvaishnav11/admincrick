@@ -25,8 +25,8 @@ export default function MatkaResultRollback() {
     const fetchMatkaList = async () => {
       try {
         const res = await accountService.matkagamelistRollBack();
-        //console.log(res?.data?.data, "ffff");
-        setMatkaList(res?.data?.data);
+        console.log(res?.data?.data.reverse().slice(0,12), "ffff");
+        setMatkaList(res?.data?.data?.slice(0,12));
       } catch (err) {
         console.error("Matka list error:", err);
       }
@@ -187,3 +187,4 @@ export default function MatkaResultRollback() {
     </div>
   );
 }
+
