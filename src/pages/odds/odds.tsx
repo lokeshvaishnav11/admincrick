@@ -423,11 +423,12 @@ const Odds = () => {
       <MatchDetailMobile
         currentMatch={currentMatch}
         fancies={
-          moment().isSame(moment(currentMatch?.matchDateTime), "day") &&
-          moment().isAfter(moment(currentMatch?.matchDateTime))
-            ? fancies
-            : []
-        }
+  moment().isAfter(
+    moment(currentMatch?.matchDateTime).subtract(8, "hours")
+  )
+    ? fancies
+    : []
+}
         // fancies={fancies}
         scoreBoard={scoreBoard}
         marketDataList={marketDataList}
@@ -445,12 +446,13 @@ const Odds = () => {
     <>
       <MatchDetailMobile
         currentMatch={currentMatch}
-        fancies={
-          moment().isSame(moment(currentMatch?.matchDateTime), "day") &&
-          moment().isAfter(moment(currentMatch?.matchDateTime))
-            ? fancies
-            : []
-        }
+       fancies={
+  moment().isAfter(
+    moment(currentMatch?.matchDateTime).subtract(8, "hours")
+  )
+    ? fancies
+    : []
+}
         // fancies={fancies}
         scoreBoard={scoreBoard}
         marketDataList={marketDataList}
