@@ -95,7 +95,7 @@ const ClientBetsUser = () => {
   const maid = useParams().matchId;
 
   React.useEffect(() => {
-    accountService.matchdetail2().then((res: AxiosResponse) => {
+    accountService.matchdetail2(maid).then((res: AxiosResponse) => {
       //console.log(res, "marketffffff data");
       const allms = res?.data?.data?.matches;
 
@@ -206,7 +206,7 @@ const ClientBetsUser = () => {
 
   const handleDateFilter = async (isFilterApplied = false) => {
     try {
-      const res = await accountService.matchdetail2();
+      const res = await accountService.matchdetail2(maid);
       // //console.log(res, "maatchh commsion report");
 
       const allms = res?.data?.data?.matches;
@@ -324,7 +324,7 @@ const ClientBetsUser = () => {
 
   React.useEffect(() => {
     handleDateFilter(false); // no date filter
-  }, [maid]);
+  }, [maid , userState , shared]);
 
   const [selectedUser, setSelectedUser] = React.useState<string | null>(null);
 
@@ -381,7 +381,7 @@ const ClientBetsUser = () => {
 
   return (
     <>
-      <div className="container" style={{ marginBottom: "150px" }}>
+      <div className="container" style={{ marginBottom: "150px" ,padding:"0px"}}>
         <div className="res-table d-none"></div>
 
         <div className="control-group mt-2 selectize-control single">
