@@ -157,7 +157,7 @@ totalDenaMatka += denaMatka;
       denaTotalComm: totalDenaCasino + totalDenaSports + totalDenaMatka ,
     });
 
-    //console.log(result, "ressss")
+    console.log(result, "ressss")
 
     return result;
   };
@@ -435,8 +435,9 @@ totalDenaMatka += denaMatka;
                     )
                     ?.map(
                       (row) =>
-                        Number(row?.milaTotalComm.toFixed(2)) +
-                          Number(row?.denaTotalComm.toFixed(2)) >
+                        // Number(row?.milaTotalComm.toFixed(2)) +
+                        //   Number(row?.denaTotalComm.toFixed(2))
+                        1 >
                           0 && (
                           <tr key={row.name}>
                             <td className="">
