@@ -1,3 +1,492 @@
+// import moment from "moment";
+// import React, { MouseEvent } from "react";
+// import ReactPaginate from "react-paginate";
+// import { toast } from "react-toastify";
+// import accountService from "../../../services/account.service";
+// import { betDateFormat, dateFormat } from "../../../utils/helper";
+// import { isMobile } from "react-device-detect";
+// import mobileSubheader from "../_layout/elements/mobile-subheader";
+// import userService from "../../../services/user.service";
+// import CustomAutoComplete from "../../components/CustomAutoComplete";
+// import { AccoutStatement } from "../../../models/AccountStatement";
+// import betService from "../../../services/bet.service";
+// import { AxiosResponse } from "axios";
+// import ReactModal from "react-modal";
+// import BetListComponent from "../UnsetteleBetHistory/bet-list.component";
+// import { useAppSelector } from "../../../redux/hooks";
+// import { selectLoader } from "../../../redux/actions/common/commonSlice";
+
+// import "./CommissionTable.css";
+// import { useParams } from "react-router-dom";
+
+// const AccountStatementAdmin = () => {
+//   const loadingState = useAppSelector(selectLoader);
+
+//   const myuser = useParams().name;
+
+//   const [accountStmt, setAccountStmt] = React.useState<any>({});
+//   const [parseAccountStmt, setparseAccountStmt] = React.useState<any>([]);
+
+//   const [tabledata, setTabledata] = React.useState<any>([]);
+
+//   const [closeBalance, setCloseBalance] = React.useState(0);
+//   const [currentItems, setCurrentItems] = React.useState<any>([]);
+//   const [itemOffset, setItemOffset] = React.useState<any>(0);
+//   const [itemsPerPage] = React.useState<any>(50);
+//   const [pageCount, setPageCount] = React.useState<any>(0);
+
+//   const [isOpen, setIsOpen] = React.useState(false);
+//   const [betHistory, setBetHistory] = React.useState<any>({});
+//   const [selectedStmt, setSelectedStmt] = React.useState<AccoutStatement>(
+//     {} as AccoutStatement
+//   );
+//   const [openBalance, setOpenBalance] = React.useState(0);
+
+//   const [filterdata, setfilterdata] = React.useState<any>({
+//     startDate: "",
+//     endDate: "",
+//     reportType: "All",
+//     userId: "",
+//   });
+//   const [page, setPage] = React.useState(1);
+//   const [pageBet, setPageBet] = React.useState(1);
+
+//   React.useEffect(() => {
+//     const endOffset = itemOffset + itemsPerPage;
+//     setCurrentItems(parseAccountStmt.slice(itemOffset, endOffset));
+//     setPageCount(Math.ceil(parseAccountStmt.length / itemsPerPage));
+//   }, [itemOffset, itemsPerPage, parseAccountStmt]);
+
+//   React.useEffect(() => {
+//     betService.lenadena().then((res: AxiosResponse<any>) => {
+//       setTabledata(res.data.data);
+//       //console.log(res, "res for lena dena jai hind !");
+//     });
+//   }, []);
+
+//   type TableItem = {
+//     Username: string;
+//     money: number; // The money value for Casino/Sports
+//     // Add other properties if needed
+//   };
+
+//   const handlePageClick = (event: any) => {
+//     const newOffset = (event.selected * itemsPerPage) % parseAccountStmt.length;
+//     setItemOffset(newOffset);
+//     setPage(event.selected);
+//   };
+
+//   const dataformat = (response: any, closingbalance: any) => {
+//     const aryNewFormat: any = [];
+
+//     response &&
+//       response.map((stmt: any, index: number) => {
+//         closingbalance = closingbalance + stmt.amount;
+//         aryNewFormat.push({
+//           _id: stmt._id,
+//           // eslint-disable-next-line camelcase
+//           sr_no: index + 1,
+//           date: moment(stmt.createdAt).format(dateFormat),
+//           credit: stmt.amount,
+//           debit: stmt.amount,
+//           closing: closingbalance.toFixed(2),
+//           narration: stmt.narration,
+//           type: stmt.type,
+//           stmt: stmt,
+//         });
+//       });
+//     return aryNewFormat;
+//   };
+
+//   React.useEffect(() => {
+//     const filterObj = filterdata;
+//     filterObj.startDate = moment().subtract(70, "days").format("YYYY-MM-DD");
+//     filterObj.endDate = moment().format("YYYY-MM-DD");
+//     setfilterdata(filterObj);
+//   }, []);
+
+//   const getAccountStmt = (page: number) => {
+//     accountService
+//       .getAccountList(page, filterdata)
+//       .then((res) => {
+//         if (res?.data?.data) setAccountStmt(res?.data?.data?.items || []);
+//         if (res?.data?.data?.items && page == 0)
+//           setOpenBalance(res?.data?.data?.openingBalance || 0);
+//         setparseAccountStmt(
+//           dataformat(
+//             res?.data?.data?.items || [],
+//             res?.data?.data?.openingBalance || 0
+//           )
+//         );
+//         setPage(page);
+//       })
+//       .catch((e) => {
+//         console.log(e);
+//         // const error = e.response.data.message
+//         toast.error("error");
+//       });
+//   };
+
+//   const handleformchange = (event: any) => {
+//     const filterObj = filterdata;
+//     filterObj[event.target.name] = event.target.value;
+//     setfilterdata(filterObj);
+//   };
+
+//   const submitAccountStatement = () => {
+//     getAccountStmt(1);
+//   };
+
+//   const handleSubmitform = (event: any) => {
+//     event.preventDefault();
+//     submitAccountStatement();
+//   };
+
+//   const onSuggestionsFetchRequested = ({ value }: any) => {
+//     return userService.getUserListSuggestion({ username: value });
+//   };
+
+//   // React.useEffect(()=>{
+//   //   submitAccountStatement();
+//   // },[myuser])
+
+//   React.useEffect(() => {
+//     if (myuser) {
+//       setfilterdata({ ...filterdata, userId: myuser });
+//     }
+//   }, [myuser]);
+
+//   React.useEffect(() => {
+//     if (filterdata.userId) {
+//       submitAccountStatement(); // only after userId is set
+//     }
+//   }, [filterdata.userId]);
+
+//   // const onSelectUser = () => {
+
+//   //   // console.log(user._id,"user id")
+
+//   //   setfilterdata({ ...filterdata, userId: myuser });
+//   // };
+
+//   const handlePageClickBets = (event: any) => {
+//     getBetsData(selectedStmt, event.selected + 1);
+//   };
+
+//   React.useEffect(() => {
+//     if (isOpen) getBetsData(selectedStmt, pageBet);
+//   }, [selectedStmt, pageBet, isOpen]);
+
+//   const getBetsData = (stmt: AccoutStatement, pageNumber: number) => {
+//     const betIds: any = stmt?.allBets?.map(({ betId }: any) => betId);
+
+//     if (betIds && betIds.length > 0) {
+//       betService
+//         .getBetListByIds(betIds, pageNumber)
+//         .then((res: AxiosResponse) => {
+//           setIsOpen(true);
+//           setBetHistory(res.data.data);
+//           setPageBet(pageNumber);
+//         });
+//     }
+//   };
+
+//   const getBets = (
+//     e: MouseEvent<HTMLTableCellElement>,
+//     stmt: AccoutStatement
+//   ) => {
+//     e.preventDefault();
+//     setBetHistory({});
+//     setSelectedStmt(stmt);
+//     setPageBet(1);
+//     setIsOpen(true);
+//   };
+
+//   const getAcHtml = () => {
+//     let closingbalance: number = page == 1 ? openBalance : closeBalance;
+//     const achtml =
+//       currentItems &&
+//       currentItems.map((stmt: any, index: number) => {
+//         closingbalance = closingbalance + stmt.amount;
+//         return (
+//           <tr key={`${stmt._id}${index}`}>
+//             <td>{stmt.sr_no}</td>
+//             <td className="wnwrap">{stmt.date}</td>
+//             <td className="green wnwrap">
+//               {stmt.credit >= 0 && stmt.credit.toFixed(2)}
+//             </td>
+//             <td className="red wnwrap">
+//               {stmt.credit < 0 && stmt.credit.toFixed(2)}
+//             </td>
+//             <td className="green wnwrap">{stmt.closing}</td>
+//             <td>{stmt.stmt.txnBy}</td>
+//             <td
+//               onClick={(e: MouseEvent<HTMLTableCellElement>) =>
+//                 getBets(e, stmt.stmt)
+//               }
+//             >
+//               <span className={stmt.type == "pnl" ? "label-buttonccc" : ""}>
+//                 {stmt.narration}
+//               </span>
+//             </td>
+//           </tr>
+//         );
+//       });
+//     return achtml;
+//   };
+
+//   const calculateTotal = (casino: number, sports: number) => {
+//     return casino + sports;
+//   };
+
+//   return (
+//     <>
+//       {mobileSubheader.subheaderdesktopadmin("Account Statements")}
+//       <div className="container-fluid">
+//         <div className="row">
+//           <div
+//             className={
+//               !isMobile ? "col-md-12 mt-1" : "col-md-12 padding-custom"
+//             }
+//           >
+//             <div className="card-body p15 bg-gray mb-20">
+//               <form
+//                 className="ng-pristine ng-valid ng-touched mb-0"
+//                 method="post"
+//                 onSubmit={handleSubmitform}
+//               >
+//                 {/* <div className='row row5'> oldd */}
+//                 <div className="row row2">
+//                   <div className="col-6 col-lg-2 mbc-5 d-none">
+//                     <label className="label">User</label>
+//                     <CustomAutoComplete
+//                       onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+//                       // onSelectUser={onSelectUser}
+//                     />
+//                   </div>
+//                   <div className="col-6 col-lg-2 mbc-5 d-none">
+//                     <div className="form-group mb-0">
+//                       <label className="label">Start Date</label>
+//                       <div className="mx-datepicker">
+//                         <div className="mx-input-wrapper">
+//                           <input
+//                             name="startDate"
+//                             type="date"
+//                             autoComplete="off"
+//                             onChange={handleformchange}
+//                             defaultValue={filterdata.startDate}
+//                             placeholder="Select Date"
+//                             className="mx-input ng-pristine ng-valid ng-touched"
+//                           />
+//                         </div>
+//                       </div>
+//                     </div>
+//                   </div>
+//                   <div className="col-6 col-lg-2 mbc-5 d-none">
+//                     <div className="form-group mb-0">
+//                       <label className="label">End Date</label>
+//                       <div className="mx-datepicker">
+//                         <div className="mx-input-wrapper">
+//                           <input
+//                             name="endDate"
+//                             type="date"
+//                             autoComplete="off"
+//                             defaultValue={filterdata.endDate}
+//                             onChange={handleformchange}
+//                             placeholder="Select Date"
+//                             className="mx-input ng-untouched ng-pristine ng-valid"
+//                           />
+//                         </div>
+//                       </div>
+//                     </div>
+//                   </div>
+//                   <div className="col-12 col-lg-2 mbc-5">
+//                     <div className="form-group mb-0">
+//                       <label className="label">Type</label>
+//                       <select
+//                         name="reportType"
+//                         onChange={handleformchange}
+//                         className="custom-select ng-untouched ng-pristine ng-valid"
+//                       >
+//                         <option value="ALL">All </option>
+//                         <option value="chip">Deposit/Withdraw </option>
+//                         <option value="game">Game Report </option>
+//                       </select>
+//                     </div>
+//                   </div>
+//                   <div className="col-12 col-lg-1 mbc-5">
+//                     <label className="label">&nbsp;</label>
+//                     <button type="submit" className="btn btn-primary btn-block">
+//                       Submit
+//                     </button>
+//                   </div>
+//                 </div>
+//               </form>
+//             </div>
+//             <div className="card-body">
+//               <div className="table-responsive">
+//                 <table className="text-center" id="customers1">
+//                   <thead>
+//                     <tr>
+//                       <th
+//                         className="text-black"
+//                         style={{
+//                           width: "10%",
+//                           background: "darkgoldenrod",
+//                           textAlign: "center",
+//                           whiteSpace: "nowrap",
+//                         }}
+//                       >
+//                         Sr No.
+//                       </th>
+//                       <th
+//                         className="text-black"
+//                         style={{
+//                           width: "20%",
+//                           background: "darkgoldenrod",
+//                           textAlign: "center",
+//                           whiteSpace: "nowrap",
+//                         }}
+//                       >
+//                         Date{" "}
+//                       </th>
+//                       <th
+//                         className="text-black"
+//                         style={{
+//                           width: "10%",
+//                           background: "darkgoldenrod",
+//                           textAlign: "center",
+//                         }}
+//                       >
+//                         Credit{" "}
+//                       </th>
+//                       <th
+//                         className="text-black"
+//                         style={{
+//                           width: "10%",
+//                           background: "darkgoldenrod",
+//                           textAlign: "center",
+//                         }}
+//                       >
+//                         Debit
+//                       </th>
+//                       <th
+//                         className="text-black"
+//                         style={{
+//                           width: "10%",
+//                           background: "darkgoldenrod",
+//                           textAlign: "center",
+//                         }}
+//                       >
+//                         Balance
+//                       </th>
+//                       <th
+//                         className="text-black"
+//                         style={{
+//                           width: "10%",
+//                           background: "darkgoldenrod",
+//                           textAlign: "center",
+//                         }}
+//                       >
+//                         From
+//                       </th>
+//                       <th
+//                         className="text-black"
+//                         style={{
+//                           width: "45%",
+//                           background: "darkgoldenrod",
+//                           textAlign: "center",
+//                         }}
+//                       >
+//                         Remark
+//                       </th>
+//                     </tr>
+//                   </thead>
+//                   <tbody>
+//                     {parseAccountStmt.length <= 0 ||
+//                       (parseAccountStmt.length > 0 &&
+//                         parseAccountStmt.length <= 0 && (
+//                           <tr>
+//                             <td colSpan={8} className="text-center">
+//                               No Result Found
+//                             </td>
+//                           </tr>
+//                         ))}
+//                     {parseAccountStmt.length > 0 &&
+//                       parseAccountStmt.length > 0 &&
+//                       page == 0 && (
+//                         <tr key={parseAccountStmt[0]._id}>
+//                           <td>-</td>
+//                           <td className="wnwrap">
+//                             {moment(parseAccountStmt[0].createdAt).format(
+//                               betDateFormat
+//                             )}
+//                           </td>
+//                           <td>-</td>
+//                           <td>-</td>
+//                           <td className="wnwrap">{openBalance}</td>
+//                           <td className="wnwrap">Opening Balance</td>
+//                         </tr>
+//                       )}
+
+//                     {getAcHtml()}
+//                   </tbody>
+//                 </table>
+//               </div>
+//               <ReactPaginate
+//                 breakLabel="..."
+//                 nextLabel="Next"
+//                 onPageChange={handlePageClick}
+//                 pageRangeDisplayed={5}
+//                 pageCount={pageCount}
+//                 containerClassName={"pagination"}
+//                 activeClassName={"active"}
+//                 previousLabel={"Prev"}
+//                 breakClassName={"break-me"}
+//               />
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//       <ReactModal
+//         isOpen={isOpen}
+//         onAfterClose={() => setIsOpen(false)}
+//         onRequestClose={(e: any) => {
+//           setIsOpen(false);
+//         }}
+//         contentLabel="Set Max Bet Limit"
+//         className={"col-md-12"}
+//         ariaHideApp={false}
+//       >
+//         <div className="modal-content">
+//           <div className="modal-header">
+//             <h5>Bets</h5>
+//             <button
+//               onClick={() => setIsOpen(false)}
+//               className="close float-right"
+//             >
+//               <i className="fa fa-times-circle"></i>
+//             </button>
+//           </div>
+//           <div className="modal-body">
+//             {!loadingState && (
+//               <BetListComponent
+//                 bethistory={betHistory}
+//                 handlePageClick={handlePageClickBets}
+//                 page={page}
+//                 isTrash={false}
+//               />
+//             )}
+//           </div>
+//         </div>
+//       </ReactModal>
+//     </>
+//   );
+// };
+// export default AccountStatementAdmin;
+
+
+
 import moment from "moment";
 import React, { MouseEvent } from "react";
 import ReactPaginate from "react-paginate";
@@ -21,25 +510,18 @@ import { useParams } from "react-router-dom";
 
 const AccountStatementAdmin = () => {
   const loadingState = useAppSelector(selectLoader);
-
   const myuser = useParams().name;
 
-  const [accountStmt, setAccountStmt] = React.useState<any>({});
-  const [parseAccountStmt, setparseAccountStmt] = React.useState<any>([]);
-
-  const [tabledata, setTabledata] = React.useState<any>([]);
-
-  const [closeBalance, setCloseBalance] = React.useState(0);
   const [currentItems, setCurrentItems] = React.useState<any>([]);
-  const [itemOffset, setItemOffset] = React.useState<any>(0);
+  const [pageCount, setPageCount] = React.useState(0);
   const [itemsPerPage] = React.useState<any>(50);
-  const [pageCount, setPageCount] = React.useState<any>(0);
 
   const [isOpen, setIsOpen] = React.useState(false);
   const [betHistory, setBetHistory] = React.useState<any>({});
   const [selectedStmt, setSelectedStmt] = React.useState<AccoutStatement>(
     {} as AccoutStatement
   );
+
   const [openBalance, setOpenBalance] = React.useState(0);
 
   const [filterdata, setfilterdata] = React.useState<any>({
@@ -48,43 +530,20 @@ const AccountStatementAdmin = () => {
     reportType: "All",
     userId: "",
   });
+
   const [page, setPage] = React.useState(1);
   const [pageBet, setPageBet] = React.useState(1);
 
-  React.useEffect(() => {
-    const endOffset = itemOffset + itemsPerPage;
-    setCurrentItems(parseAccountStmt.slice(itemOffset, endOffset));
-    setPageCount(Math.ceil(parseAccountStmt.length / itemsPerPage));
-  }, [itemOffset, itemsPerPage, parseAccountStmt]);
-
-  React.useEffect(() => {
-    betService.lenadena().then((res: AxiosResponse<any>) => {
-      setTabledata(res.data.data);
-      //console.log(res, "res for lena dena jai hind !");
-    });
-  }, []);
-
-  type TableItem = {
-    Username: string;
-    money: number; // The money value for Casino/Sports
-    // Add other properties if needed
-  };
-
-  const handlePageClick = (event: any) => {
-    const newOffset = (event.selected * itemsPerPage) % parseAccountStmt.length;
-    setItemOffset(newOffset);
-    setPage(event.selected);
-  };
-
+  // 🔥 FORMAT FUNCTION (UNCHANGED)
   const dataformat = (response: any, closingbalance: any) => {
     const aryNewFormat: any = [];
 
     response &&
       response.map((stmt: any, index: number) => {
         closingbalance = closingbalance + stmt.amount;
+
         aryNewFormat.push({
           _id: stmt._id,
-          // eslint-disable-next-line camelcase
           sr_no: index + 1,
           date: moment(stmt.createdAt).format(dateFormat),
           credit: stmt.amount,
@@ -95,44 +554,47 @@ const AccountStatementAdmin = () => {
           stmt: stmt,
         });
       });
+
     return aryNewFormat;
   };
 
+  // 🔥 INITIAL DATE SET
   React.useEffect(() => {
     const filterObj = filterdata;
     filterObj.startDate = moment().subtract(70, "days").format("YYYY-MM-DD");
     filterObj.endDate = moment().format("YYYY-MM-DD");
-    setfilterdata(filterObj);
+    setfilterdata({ ...filterObj });
   }, []);
 
-  const getAccountStmt = (page: number) => {
+  // 🔥 MAIN API CALL (FIXED)
+  const getAccountStmt = (pageNumber: number) => {
     accountService
-      .getAccountList(page, filterdata)
+      .getAccountList(pageNumber, filterdata)
       .then((res) => {
-        if (res?.data?.data) setAccountStmt(res?.data?.data?.items || []);
-        if (res?.data?.data?.items && page == 0)
-          setOpenBalance(res?.data?.data?.openingBalance || 0);
-        setparseAccountStmt(
+        const items = res?.data?.data?.items || [];
+
+        setCurrentItems(
           dataformat(
-            res?.data?.data?.items || [],
+            items,
             res?.data?.data?.openingBalance || 0
           )
         );
-        setPage(page);
+
+        setOpenBalance(res?.data?.data?.openingBalance || 0);
+
+        // 🔥 IMPORTANT (backend se total bhejna padega)
+        setPageCount(
+          Math.ceil((res?.data?.data?.total || 0) / itemsPerPage)
+        );
+
+        setPage(pageNumber);
       })
-      .catch((e) => {
-        console.log(e);
-        // const error = e.response.data.message
+      .catch(() => {
         toast.error("error");
       });
   };
 
-  const handleformchange = (event: any) => {
-    const filterObj = filterdata;
-    filterObj[event.target.name] = event.target.value;
-    setfilterdata(filterObj);
-  };
-
+  // 🔥 SUBMIT
   const submitAccountStatement = () => {
     getAccountStmt(1);
   };
@@ -142,13 +604,21 @@ const AccountStatementAdmin = () => {
     submitAccountStatement();
   };
 
+  // 🔥 PAGINATION CLICK (FIXED)
+  const handlePageClick = (event: any) => {
+    const selectedPage = event.selected + 1;
+    getAccountStmt(selectedPage);
+  };
+
+  const handleformchange = (event: any) => {
+    const filterObj = filterdata;
+    filterObj[event.target.name] = event.target.value;
+    setfilterdata({ ...filterObj });
+  };
+
   const onSuggestionsFetchRequested = ({ value }: any) => {
     return userService.getUserListSuggestion({ username: value });
   };
-
-  // React.useEffect(()=>{
-  //   submitAccountStatement();
-  // },[myuser])
 
   React.useEffect(() => {
     if (myuser) {
@@ -158,17 +628,11 @@ const AccountStatementAdmin = () => {
 
   React.useEffect(() => {
     if (filterdata.userId) {
-      submitAccountStatement(); // only after userId is set
+      submitAccountStatement();
     }
   }, [filterdata.userId]);
 
-  // const onSelectUser = () => {
-
-  //   // console.log(user._id,"user id")
-
-  //   setfilterdata({ ...filterdata, userId: myuser });
-  // };
-
+  // 🔥 BET MODAL (UNCHANGED)
   const handlePageClickBets = (event: any) => {
     getBetsData(selectedStmt, event.selected + 1);
   };
@@ -202,253 +666,110 @@ const AccountStatementAdmin = () => {
     setIsOpen(true);
   };
 
+  // 🔥 TABLE (UNCHANGED LOGIC)
   const getAcHtml = () => {
-    let closingbalance: number = page == 1 ? openBalance : closeBalance;
-    const achtml =
-      currentItems &&
-      currentItems.map((stmt: any, index: number) => {
-        closingbalance = closingbalance + stmt.amount;
-        return (
-          <tr key={`${stmt._id}${index}`}>
-            <td>{stmt.sr_no}</td>
-            <td className="wnwrap">{stmt.date}</td>
-            <td className="green wnwrap">
-              {stmt.credit >= 0 && stmt.credit.toFixed(2)}
-            </td>
-            <td className="red wnwrap">
-              {stmt.credit < 0 && stmt.credit.toFixed(2)}
-            </td>
-            <td className="green wnwrap">{stmt.closing}</td>
-            <td>{stmt.stmt.txnBy}</td>
-            <td
-              onClick={(e: MouseEvent<HTMLTableCellElement>) =>
-                getBets(e, stmt.stmt)
-              }
-            >
-              <span className={stmt.type == "pnl" ? "label-buttonccc" : ""}>
-                {stmt.narration}
-              </span>
-            </td>
-          </tr>
-        );
-      });
-    return achtml;
-  };
+    let closingbalance: number = openBalance;
 
-  const calculateTotal = (casino: number, sports: number) => {
-    return casino + sports;
+    return currentItems.map((stmt: any, index: number) => {
+      closingbalance = closingbalance + stmt.credit;
+
+      return (
+        <tr key={`${stmt._id}${index}`}>
+          <td>{stmt.sr_no}</td>
+          <td className="wnwrap">{stmt.date}</td>
+
+          <td className="green">
+            {stmt.credit >= 0 && stmt.credit.toFixed(2)}
+          </td>
+
+          <td className="red">
+            {stmt.credit < 0 && stmt.credit.toFixed(2)}
+          </td>
+
+          <td className="green">{stmt.closing}</td>
+
+          <td>{stmt.stmt.txnBy}</td>
+
+          <td onClick={(e) => getBets(e, stmt.stmt)}>
+            <span className={stmt.type == "pnl" ? "label-buttonccc" : ""}>
+              {stmt.narration}
+            </span>
+          </td>
+        </tr>
+      );
+    });
   };
 
   return (
     <>
       {mobileSubheader.subheaderdesktopadmin("Account Statements")}
-      <div className="container-fluid">
-        <div className="row">
-          <div
-            className={
-              !isMobile ? "col-md-12 mt-1" : "col-md-12 padding-custom"
-            }
-          >
-            <div className="card-body p15 bg-gray mb-20">
-              <form
-                className="ng-pristine ng-valid ng-touched mb-0"
-                method="post"
-                onSubmit={handleSubmitform}
-              >
-                {/* <div className='row row5'> oldd */}
-                <div className="row row2">
-                  <div className="col-6 col-lg-2 mbc-5 d-none">
-                    <label className="label">User</label>
-                    <CustomAutoComplete
-                      onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                      // onSelectUser={onSelectUser}
-                    />
-                  </div>
-                  <div className="col-6 col-lg-2 mbc-5 d-none">
-                    <div className="form-group mb-0">
-                      <label className="label">Start Date</label>
-                      <div className="mx-datepicker">
-                        <div className="mx-input-wrapper">
-                          <input
-                            name="startDate"
-                            type="date"
-                            autoComplete="off"
-                            onChange={handleformchange}
-                            defaultValue={filterdata.startDate}
-                            placeholder="Select Date"
-                            className="mx-input ng-pristine ng-valid ng-touched"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-6 col-lg-2 mbc-5 d-none">
-                    <div className="form-group mb-0">
-                      <label className="label">End Date</label>
-                      <div className="mx-datepicker">
-                        <div className="mx-input-wrapper">
-                          <input
-                            name="endDate"
-                            type="date"
-                            autoComplete="off"
-                            defaultValue={filterdata.endDate}
-                            onChange={handleformchange}
-                            placeholder="Select Date"
-                            className="mx-input ng-untouched ng-pristine ng-valid"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-lg-2 mbc-5">
-                    <div className="form-group mb-0">
-                      <label className="label">Type</label>
-                      <select
-                        name="reportType"
-                        onChange={handleformchange}
-                        className="custom-select ng-untouched ng-pristine ng-valid"
-                      >
-                        <option value="ALL">All </option>
-                        <option value="chip">Deposit/Withdraw </option>
-                        <option value="game">Game Report </option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="col-12 col-lg-1 mbc-5">
-                    <label className="label">&nbsp;</label>
-                    <button type="submit" className="btn btn-primary btn-block">
-                      Submit
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div className="card-body">
-              <div className="table-responsive">
-                <table className="text-center" id="customers1">
-                  <thead>
-                    <tr>
-                      <th
-                        className="text-black"
-                        style={{
-                          width: "10%",
-                          background: "darkgoldenrod",
-                          textAlign: "center",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        Sr No.
-                      </th>
-                      <th
-                        className="text-black"
-                        style={{
-                          width: "20%",
-                          background: "darkgoldenrod",
-                          textAlign: "center",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        Date{" "}
-                      </th>
-                      <th
-                        className="text-black"
-                        style={{
-                          width: "10%",
-                          background: "darkgoldenrod",
-                          textAlign: "center",
-                        }}
-                      >
-                        Credit{" "}
-                      </th>
-                      <th
-                        className="text-black"
-                        style={{
-                          width: "10%",
-                          background: "darkgoldenrod",
-                          textAlign: "center",
-                        }}
-                      >
-                        Debit
-                      </th>
-                      <th
-                        className="text-black"
-                        style={{
-                          width: "10%",
-                          background: "darkgoldenrod",
-                          textAlign: "center",
-                        }}
-                      >
-                        Balance
-                      </th>
-                      <th
-                        className="text-black"
-                        style={{
-                          width: "10%",
-                          background: "darkgoldenrod",
-                          textAlign: "center",
-                        }}
-                      >
-                        From
-                      </th>
-                      <th
-                        className="text-black"
-                        style={{
-                          width: "45%",
-                          background: "darkgoldenrod",
-                          textAlign: "center",
-                        }}
-                      >
-                        Remark
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {parseAccountStmt.length <= 0 ||
-                      (parseAccountStmt.length > 0 &&
-                        parseAccountStmt.length <= 0 && (
-                          <tr>
-                            <td colSpan={8} className="text-center">
-                              No Result Found
-                            </td>
-                          </tr>
-                        ))}
-                    {parseAccountStmt.length > 0 &&
-                      parseAccountStmt.length > 0 &&
-                      page == 0 && (
-                        <tr key={parseAccountStmt[0]._id}>
-                          <td>-</td>
-                          <td className="wnwrap">
-                            {moment(parseAccountStmt[0].createdAt).format(
-                              betDateFormat
-                            )}
-                          </td>
-                          <td>-</td>
-                          <td>-</td>
-                          <td className="wnwrap">{openBalance}</td>
-                          <td className="wnwrap">Opening Balance</td>
-                        </tr>
-                      )}
 
-                    {getAcHtml()}
-                  </tbody>
-                </table>
+      <div className="container-fluid">
+        <div className="card-body p15 bg-gray mb-20">
+          <form onSubmit={handleSubmitform}>
+            <div className="row row2">
+              <div className="col-12 col-lg-2">
+                <label>Type</label>
+                <select
+                  name="reportType"
+                  onChange={handleformchange}
+                  className="custom-select"
+                >
+                  <option value="ALL">All</option>
+                  <option value="chip">Deposit/Withdraw</option>
+                  <option value="game">Game Report</option>
+                </select>
               </div>
-              <ReactPaginate
-                breakLabel="..."
-                nextLabel="Next"
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={5}
-                pageCount={pageCount}
-                containerClassName={"pagination"}
-                activeClassName={"active"}
-                previousLabel={"Prev"}
-                breakClassName={"break-me"}
-              />
+
+              <div className="col-12 col-lg-1">
+                <label>&nbsp;</label>
+                <button type="submit" className="btn btn-primary btn-block">
+                  Submit
+                </button>
+              </div>
             </div>
-          </div>
+          </form>
+        </div>
+
+        <div className="card-body">
+          <table className="text-center" id="customers1">
+            <thead>
+              <tr>
+                <th>Sr No.</th>
+                <th>Date</th>
+                <th>Credit</th>
+                <th>Debit</th>
+                <th>Balance</th>
+                <th>From</th>
+                <th>Remark</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {currentItems.length === 0 ? (
+                <tr>
+                  <td colSpan={7}>No Result Found</td>
+                </tr>
+              ) : (
+                getAcHtml()
+              )}
+            </tbody>
+          </table>
+
+          {/* 🔥 PAGINATION */}
+          <ReactPaginate
+            breakLabel="..."
+            nextLabel="Next"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            pageCount={pageCount}
+            containerClassName={"pagination"}
+            activeClassName={"active"}
+            previousLabel={"Prev"}
+          />
         </div>
       </div>
-      <ReactModal
+        <ReactModal
         isOpen={isOpen}
         onAfterClose={() => setIsOpen(false)}
         onRequestClose={(e: any) => {
@@ -483,4 +804,5 @@ const AccountStatementAdmin = () => {
     </>
   );
 };
+
 export default AccountStatementAdmin;
