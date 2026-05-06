@@ -189,7 +189,7 @@ const Odds = () => {
             minHeight: isFullScore ? "550px" : "269px",
             transition: "min-height 0.3s ease"
           }}
-          src={`https://fancypanel.xyz/pages/scorecardcricket/${currentMatch?.matchId}`}
+          src={`https://ignite11.com/pages/scorecardcricket/${currentMatch?.matchId}`}
         />
       </div>
     );
