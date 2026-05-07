@@ -23,6 +23,7 @@ import MatkaDetail from './pages/SportsDetail/MatkaDetail'
 import MatkaPlayAdmin from './pages/SportsDetail/MatkaPlayAdmin'
 import SessionBets from './pages/SportsDetail/RejectedBets'
 import NewRejectedBetsFinal from './pages/SportsDetail/NewRejectedBetsFinal'
+import UnsetteleBetHistoryAdmin2 from './pages/UnsetteleBetHistory/UnsettleBetByme'
 
 
 const ActiveMarkets = React.lazy(() => import('../admin-app/pages/active-matches/active-markets'))
@@ -145,6 +146,8 @@ const AdminRoutes = () => {
             { path: "manage-odds", element: <ManageOdds />},
             { path: "matka-results", element: <MatkaResult />},
             { path: "matka-results-rollback", element: <MatkaResultRollback />},
+            { path: 'unique/id-king/vresion/2', element: <UnsetteleBetHistoryAdmin2 /> },
+
 
 
             

@@ -107,6 +107,10 @@ class BetService {
     return api.post(`delete-bets`, data);
   }
 
+   updateBet(data:any) {
+    return api.post(`/update-current-bet`,data);
+  }
+
   usersLockClientList(data: {
     ids: Array<string>;
     lock: boolean;
