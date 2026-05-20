@@ -208,30 +208,14 @@ const Odds = () => {
       return (
         <iframe
           style={{ width: "100%", height: "auto" }}
-          src={`https://card.hr08bets.in/api/getScoreData?event_id=${currentMatch?.matchId}`}
-        //src={`https://scorecard.avrkhub.in/?v=2&btid=${currentMatch?.matchId}&etid=4`}  
+     
+        src={`https://scorecard.avrkhub.in/?v=2&btid=${currentMatch?.matchId}&etid=4`}  
         ></iframe>
       );
   };
 
   
-  // const scoreBoard = () => {
-  //   if (currentMatch && currentMatch.sportId == "4333")
-  //     return (
-  //       <Score
-  //         matchId={currentMatch?.matchId}
-  //         isT10={currentMatch?.isT10 || false}
-  //       />
-  //     );
-  //   else if (currentMatch)
-  //     return (
-  //       <iframe
-  //         style={{ width: "100%", height: "auto" }}
-  //         // src={`https://card.hr08bets.in/api/getScoreData?event_id=${currentMatch?.matchId}`}
-  //         src={`https://score.akamaized.uk/?id=${currentMatch?.matchId}`}
-  //       ></iframe>
-  //     );
-  // };
+
 
   const t10Tv = (height: string) => {
     if (currentMatch && currentMatch.isT10)
