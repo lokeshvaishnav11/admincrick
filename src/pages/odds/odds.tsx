@@ -208,8 +208,8 @@ const Odds = () => {
       return (
         <iframe
           style={{ width: "100%", height: "auto" }}
-          // src={`https://card.hr08bets.in/api/getScoreData?event_id=${currentMatch?.matchId}`}
-          src={`https://scorecard.avrkhub.in/?v=2&btid=${currentMatch?.matchId}&etid=4`} 
+          src={`https://card.hr08bets.in/api/getScoreData?event_id=${currentMatch?.matchId}`}
+        //src={`https://scorecard.avrkhub.in/?v=2&btid=${currentMatch?.matchId}&etid=4`}  
         ></iframe>
       );
   };
