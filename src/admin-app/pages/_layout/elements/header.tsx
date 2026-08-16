@@ -736,7 +736,7 @@ const Header = () => {
             style={{ background: "black" }}
           >
             {/* <img className="" src="/9x.png" /> */}
-            <img className="" style={{ width: "500px" }} src="/imgs/clogo.png" />
+            <img className="" style={{ width: "500px" }} src="/imgs/clogo.jpeg" />
           </CustomLink>
 
           <div className="">
