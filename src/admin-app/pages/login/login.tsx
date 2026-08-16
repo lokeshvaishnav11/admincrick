@@ -195,7 +195,7 @@ const Login = () => {
                 <div className='featured-box-login featured-box-secundary default log-fld'>
                   <div className='log-logo m-b-20 text-center'>
                     <img
-                      src='/imgs/clogo.png'
+                      src='/imgs/clogo.jpeg'
                       className='logo-login'
                       style={{ maxWidth: '250px', maxHeight: '100px' }}
                     />
