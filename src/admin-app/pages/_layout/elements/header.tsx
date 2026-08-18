@@ -130,7 +130,7 @@
 //         <div className='header-bottom'>
 //           <div className='container-fluid'>
 //             <CustomLink to={'/'} className='logo'>
-//               <img src='/imgs/clogo.png' />
+//               <img src='/imgs/starlogo.png' />
 //             </CustomLink>
 //             <div className='side-menu-button' onClick={toggleDrawer}>
 //               <div className='bar1' />
@@ -313,7 +313,7 @@
 //       </header>
 //       <Drawer open={isOpen} onClose={toggleDrawer} direction='left'>
 //         <div className='drawer-header'>
-//           <img src='/imgs/clogo.png' className='wd-100' />
+//           <img src='/imgs/starlogo.png' className='wd-100' />
 //         </div>
 //         <div className='drawer-content'>
 //           <Tree
@@ -736,7 +736,7 @@ const Header = () => {
             style={{ background: "black" }}
           >
             {/* <img className="" src="/9x.png" /> */}
-            <img className="" style={{ width: "500px" }} src="/imgs/clogo.jpeg" />
+            <img className="" style={{ width: "500px" }} src="/imgs/starlogo.png" />
           </CustomLink>
 
           <div className="">
@@ -1757,7 +1757,7 @@ const Header = () => {
 
       {/* <Drawer open={isOpen} onClose={toggleDrawer} direction='left'>
         <div className='drawer-header'>
-          <img src='/imgs/clogo.png' className='wd-100' />
+          <img src='/imgs/starlogo.png' className='wd-100' />
         </div>
         <div className='drawer-content'>
           <Tree
