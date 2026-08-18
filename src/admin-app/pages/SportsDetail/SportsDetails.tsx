@@ -507,6 +507,13 @@ const SportsDetails = () => {
                     >
                       <i className="fa fa-eye"></i> Display Rejected Bet
                     </CustomLink>
+                     <div className="dropdown-divider"></div>
+                      <CustomLink
+                      className="dropdown-item text-lg text-white call-event navbar-bet99"
+                      to={`/display-notification/${item.matchId}`}
+                    >
+                      <i className="fa fa-eye"></i> View Notifications
+                    </CustomLink>
                   </div>
                 )}
               </td>
