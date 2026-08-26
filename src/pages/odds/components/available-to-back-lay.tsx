@@ -211,18 +211,20 @@ export const AvailableToBackLay = React.memo(({ selections, market, runner }: Pr
   const onBet = (isBack = false, back: { price: number; size: number }) => {
     const ipAddress = authService.getIpAddress();
     if (market.oddsType === OddsType.BM && back.size === 0) return;
-       const odds = back.price * 100 - 100;
-     if (allowSuspension && odds > 100) {
+       const odds = back.price;
+     if (allowSuspension && odds > 100 ) {
     return; // ❌ Don't allow bet on suspended odds
     }
 
-    if (back.price > 0 && back.size && userState.user.role === RoleType.user) {
+    console.log(back,"Lokesh")
+
+    if ((back.price ) >= 1 && back.size && userState.user.role === RoleType.user  || !isBack &&(back.price ) >=1 && back.size && userState.user.role === RoleType.user) {
       dispatch(
         betPopup({
           isOpen: true,
           betData: {
             isBack,
-            odds: parseFloat(back.price.toFixed(4)),
+            odds: parseFloat(((back.price +100)/100).toFixed(4)),
             volume: back.size,
             marketId: market.marketId,
             marketName: market.marketName,
@@ -231,7 +233,7 @@ export const AvailableToBackLay = React.memo(({ selections, market, runner }: Pr
             selectionId: runner.selectionId,
             pnl: 0,
             stack: 0,
-            currentMarketOdds: back.price,
+            currentMarketOdds: (back.price +100)/100,
             eventId: market.sportId,
             exposure: 0,
             ipAddress,
@@ -262,8 +264,8 @@ export const AvailableToBackLay = React.memo(({ selections, market, runner }: Pr
         >
           <span className="odd d-block">
             {(() => {
-              const odds = back.price * 100 - 100;
-              if (allowSuspension && odds > 100 || allowSuspension && odds ==0) return "SUSPEND";
+              const odds = back.price 
+              if (allowSuspension && (odds > 100 || odds ==1)|| allowSuspension && odds ==0) return "0";
               return odds.toFixed(0) || "-";
             })()}
           </span>
@@ -288,8 +290,8 @@ export const AvailableToBackLay = React.memo(({ selections, market, runner }: Pr
         >
           <span className="odd d-block" style={{ width: "67px" }}>
             {(() => {
-              const odds = lay.price * 100 - 100;
-              if (allowSuspension && odds > 100 || allowSuspension && odds ==0) return "SUSPEND";
+              const odds = lay.price 
+              if (allowSuspension && odds > 100 || allowSuspension && odds ==0) return "0";
               return odds.toFixed(0) || "-";
             })()}
           </span>
