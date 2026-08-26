@@ -22,6 +22,8 @@ export default interface IMatch {
   offPlayFancyMaxLimit?: number
   offPlayBookMinLimit?: number
   offPlayBookMaxLimit?: number
+  fancyTotalLimit?:number
+  betDelay?:number
   result?: string
   isT10?: boolean
   inPlay?: boolean

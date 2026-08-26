@@ -135,6 +135,22 @@ const BetMaxLimitModal = ({ showDialog, closeModal, selectedMatch }: Props) => {
                         />
                       </div>
                     </div>
+                     <div className='row form-group'>
+                      <div className='col-md-4'>
+                        <label>Fancy Total Max Limit</label>
+                      </div>
+                      <div className='col-md-8'>
+                        <input
+                          type='text'
+                          required
+                          value={matchSetting.fancyTotalLimit || ''}
+                          onChange={onChangeMatchSetting}
+                          name='fancyTotalLimit'
+                          className='form-control intr'
+                          defaultValue={250000}
+                        />
+                      </div>
+                    </div>
                   </Fragment>
                 )}
                 <div className='row form-group'>
@@ -170,7 +186,7 @@ const BetMaxLimitModal = ({ showDialog, closeModal, selectedMatch }: Props) => {
                   </div>
                 </div>
               </div>
-              <div className='col-sm-6'>
+              {/* <div className='col-sm-6'>
                 <div className='text-center m-xl-3'>
                   <strong>Off Play</strong>
                 </div>
@@ -272,7 +288,7 @@ const BetMaxLimitModal = ({ showDialog, closeModal, selectedMatch }: Props) => {
                     />
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className='col-md-12'>
                 <div className='row form-group'>
@@ -282,8 +298,11 @@ const BetMaxLimitModal = ({ showDialog, closeModal, selectedMatch }: Props) => {
                   <div className='col-md-8'>
                     <input
                       type='number'
-                      defaultValue={1700}
+                      defaultValue={1000}
                       className='form-control intr'
+                      value={matchSetting.betDelay || 1000}
+                      onChange={onChangeMatchSetting}
+                      name='betDelay'
                     />
                   </div>
                 </div>
