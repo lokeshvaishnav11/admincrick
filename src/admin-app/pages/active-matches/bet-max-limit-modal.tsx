@@ -73,7 +73,7 @@ const BetMaxLimitModal = ({ showDialog, closeModal, selectedMatch }: Props) => {
                 </div>
                 <div className='row form-group'>
                   <div className='col-md-4'>
-                    <label> Min Limit</label>
+                    <label>Bookmaker Button Min Limit</label>
                   </div>
                   <div className='col-md-8'>
                     <input
@@ -88,7 +88,7 @@ const BetMaxLimitModal = ({ showDialog, closeModal, selectedMatch }: Props) => {
                 </div>
                 <div className='row form-group'>
                   <div className='col-md-4'>
-                    <label> Max Limit</label>
+                    <label> Bookmaker Button Max Limit</label>
                   </div>
                   <div className='col-md-8'>
                     <input
@@ -105,7 +105,7 @@ const BetMaxLimitModal = ({ showDialog, closeModal, selectedMatch }: Props) => {
                   <Fragment>
                     <div className='row form-group'>
                       <div className='col-md-4'>
-                        <label>Fancy Min Limit</label>
+                        <label>Fancy Button Min Limit</label>
                       </div>
                       <div className='col-md-8'>
                         <input
@@ -121,7 +121,7 @@ const BetMaxLimitModal = ({ showDialog, closeModal, selectedMatch }: Props) => {
                     </div>
                     <div className='row form-group'>
                       <div className='col-md-4'>
-                        <label>Fancy Max Limit</label>
+                        <label>Fancy Button Max Limit</label>
                       </div>
                       <div className='col-md-8'>
                         <input
@@ -155,7 +155,8 @@ const BetMaxLimitModal = ({ showDialog, closeModal, selectedMatch }: Props) => {
                 )}
                 <div className='row form-group'>
                   <div className='col-md-4'>
-                    <label>Book Min Limit</label>
+                    <label>Bookmaker 
+     Total Min Limit</label>
                   </div>
                   <div className='col-md-8'>
                     <input
@@ -171,7 +172,7 @@ const BetMaxLimitModal = ({ showDialog, closeModal, selectedMatch }: Props) => {
                 </div>
                 <div className='row form-group'>
                   <div className='col-md-4'>
-                    <label>Book Max Limit</label>
+                    <label>Bookmaker Total Max Limit</label>
                   </div>
                   <div className='col-md-8'>
                     <input
