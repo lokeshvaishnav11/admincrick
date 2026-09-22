@@ -14,5 +14,16 @@ class FancyService {
   fancyResultRollback(marketId: number | string, matchId: number) {
     return api.get(`fancy-result-rollback?marketId=${marketId}&matchId=${matchId}`)
   }
+  fancyResultUserRollback(
+  marketId: any,
+  matchId: any,
+  userIds: string[],
+) {
+  return api.post('/fancy-result-user-rollback', {
+    marketId,
+    matchId,
+    userIds,
+  })
+}
 }
 export default new FancyService()

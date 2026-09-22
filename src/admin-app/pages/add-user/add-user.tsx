@@ -72,10 +72,10 @@ const validationSchema = Yup.object().shape({
   //   then: Yup.string().required("Exposer Limit is required"),
   // }),
 
-  exposerLimit: Yup.string().when("role", {
-    is: "user",
-    then: Yup.string(),
-  }),
+  exposerLimit: Yup.number()
+    .typeError("Exposer Limit must be a number")
+    .min(0, "Exposer Limit cannot be negative")
+    .nullable(),
 });
 
 const AddUser = () => {
@@ -125,6 +125,10 @@ const AddUser = () => {
   const selfrole: any = userState?.user?.role;
 
   const thetype: any = useParams().type;
+
+  // Exposer Limit editable only when Super Admin creates Sub Admin
+  const isSuperAdminCreatingSubAdmin =
+    selfrole === "admin" && thetype === "sadmin";
   //console.log(thetype, "the type for code");
 
   // ✅ Define disallowed combinations
@@ -223,6 +227,7 @@ const AddUser = () => {
     defaultValues: {
       // password: "Abcd1122",
       transactionPassword: "123456", // Automatically sets transaction password
+      exposerLimit: 100000,
     },
   });
 
@@ -251,6 +256,14 @@ const AddUser = () => {
   React.useEffect(() => {
     setValue("transactionPassword", "123456"); // Ensures it's always included
   }, [setValue]);
+
+  // Only Super Admin -> Sub Admin gets an editable Exposer Limit on frontend.
+  // Lower-level inheritance is handled securely by the backend from parentUser.exposerLimit.
+  React.useEffect(() => {
+    if (isSuperAdminCreatingSubAdmin) {
+      setValue("exposerLimit", 100000);
+    }
+  }, [isSuperAdminCreatingSubAdmin, setValue]);
 
   // const onSubmit = handleSubmit((data) => {
   //   // Partenership
@@ -349,7 +362,12 @@ const AddUser = () => {
     setLoading(true);
 
     data.creditRefrences = data.sendamount;
-    data.exposerLimit = data.sendamount;
+
+    // Only Super Admin -> Sub Admin sends an editable Exposer Limit.
+    // For every lower child, backend ignores/inherits it from the actual parent in DB.
+    if (isSuperAdminCreatingSubAdmin) {
+      data.exposerLimit = Number(data.exposerLimit || 100000);
+    }
     // Partenership
     if (data.role !== RoleType.user) {
       const partenershipValue: any = [10, 20, 30]; // Temporary array
@@ -980,19 +998,17 @@ const AddUser = () => {
                         </div>
                       </div>
 
-                      {isExposerAllow && (
-                        <div className="col-md-6 d-none ">
+                      {isSuperAdminCreatingSubAdmin && (
+                        <div className="col-md-6">
                           <div className="form-group" id="exposer-limit">
                             <label htmlFor="exposerLimit">Exposer Limit</label>
                             <input
                               placeholder="Exposer Limit"
                               id="exposerLimit"
-                              {...register("exposerLimit")}
-                              defaultValue={""}
+                              {...register("exposerLimit", { valueAsNumber: true })}
                               type="number"
                               className="form-control"
                               min="0"
-                            // required
                             />
                             {errors?.exposerLimit && (
                               <span id="exposerlimit-error" className="error">
