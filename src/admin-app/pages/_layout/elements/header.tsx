@@ -1378,6 +1378,29 @@ const Header = () => {
                           ""
                         )}
 
+                         {userState?.user?.role === "dl" ? (
+                          <li>
+                            <CustomLink
+                              //  onClick={() => setDropdownOpen3(!dropdownOpen3)}
+                              onClick={() => {
+                                toggleDrawer();
+                                setActiveMenu("Comm");
+                              }}
+                              to="/commision-len-de-2"
+                              className={`dropdown-item ${
+                                activeMenu === "Comm" ? "bg-active" : ""
+                              }`}
+                            >
+                              <b className="text-white md:text-lg text-xs md:flex md:flex-row flex flex-col items-center gap-1">
+                                <ListIcon className="text-warning" />
+                                {" reset कमीशन लेन देन "}
+                              </b>
+                            </CustomLink>
+                          </li>
+                        ) : (
+                          ""
+                        )}
+
                         {/* {userState?.user?.role === RoleType.admin && (
                         <li>
                           <CustomLink

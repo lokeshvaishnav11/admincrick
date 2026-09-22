@@ -24,6 +24,7 @@ import MatkaPlayAdmin from './pages/SportsDetail/MatkaPlayAdmin'
 import SessionBets from './pages/SportsDetail/RejectedBets'
 import NewRejectedBetsFinal from './pages/SportsDetail/NewRejectedBetsFinal'
 import UnsetteleBetHistoryAdmin2 from './pages/UnsetteleBetHistory/UnsettleBetByme'
+import CommisionLenden2 from './pages/ledger/CommisionLenden2'
 
 
 const ActiveMarkets = React.lazy(() => import('../admin-app/pages/active-matches/active-markets'))
@@ -173,6 +174,7 @@ const AdminRoutes = () => {
             {path:"ledger-client", element: <ClientLedger/>},
             {path:"total-profit", element: <TotalProfit/>},
             {path:"commision-len-den", element: <CommisionLenden />},
+             {path:"commision-len-den-2", element: <CommisionLenden2 />},
             {path: "all-client-report", element: <AllReport/>},
             {path:"matka-pl", element:<CasinoPL/>},
             {path: "sports-details", element: <SportsDetails/>},
