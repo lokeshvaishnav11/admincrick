@@ -1052,7 +1052,6 @@ const ListClients = () => {
 
                       <th>Name</th>
                       <th>User</th>
-                      <th>Mobile</th>
                       <th>Password</th>
 
                       {urole !== "dl" && newtype !== "user" && (
@@ -1640,7 +1639,19 @@ const ListClients = () => {
                               </div>
                             </td>
 
-                            <td>{user?.code}</td>
+                            <td>
+                              <CustomLink
+                                to={`/accountstatement/${user?._id}`}
+                                style={{
+                                  color: "#007bff",
+                                  cursor: "pointer",
+                                  textDecoration: "none",
+                                  fontWeight: 600,
+                                }}
+                              >
+                                {user?.code}
+                              </CustomLink>
+                            </td>
 
                             <td className="">
                               {user.role !== RoleType.user && (
@@ -1676,41 +1687,45 @@ const ListClients = () => {
                               )}
                             </td>
 
-                            {/* <td></td> */}
                             <td>
-                              <a
-                                href={`https://wa.me/?text=${encodeURIComponent(
-                                  user.username?.startsWith("C")
-                                    ? `Login Details:\nUsername: ${user.username}\nPassword: ${user.password}\n\nLink:\nClient Link: https://crickhero.live`
-                                    : `Login Details:\nUsername: ${user.username}\nPassword: ${user.password}\n\nLinks:\nAdmin Link: https://admin.crickhero.live\nClient Link: https://crickhero.live`
-                                )}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                title="Share on WhatsApp"
+                              <div
                                 style={{
-                                  display: "inline-flex",
+                                  display: "flex",
                                   alignItems: "center",
+                                  gap: "8px",
+                                  whiteSpace: "nowrap",
                                 }}
                               >
-                                <img
-                                  src="https://admin.7wickets.co/assets/images/whatsapp.png"
-                                  alt="WhatsApp"
+                                <span>{user?.password}</span>
+
+                                <a
+                                  href={`https://wa.me/?text=${encodeURIComponent(
+                                    user.username?.startsWith("C")
+                                      ? `Login Details:\nUsername: ${user.username}\nPassword: ${user.password}\n\nLink:\nClient Link: https://crickhero.live`
+                                      : `Login Details:\nUsername: ${user.username}\nPassword: ${user.password}\n\nLinks:\nAdmin Link: https://admin.crickhero.live\nClient Link: https://crickhero.live`
+                                  )}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  title="Share on WhatsApp"
+                                  onClick={(e) => e.stopPropagation()}
                                   style={{
-                                    width: "20px",
-                                    height: "20px",
-                                    objectFit: "contain",
-                                    cursor: "pointer",
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
                                   }}
-                                />
-                              </a>
-                            </td>
-                            <td>
-                              {urole === "dl" ||
-                              urole === "mdl" ||
-                              urole === "smdl" ||
-                              urole === "suadmin"
-                                ? user?.password
-                                : user?.password}
+                                >
+                                  <img
+                                    src="https://upload.wikimedia.org/wikipedia/commons/5/5e/WhatsApp_icon.png"
+                                    alt="WhatsApp"
+                                    style={{
+                                      width: "20px",
+                                      height: "20px",
+                                      // objectFit: "contain",
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                </a>
+                              </div>
                             </td>
 
                             {urole === "dl" || newtype === "user" ? (
