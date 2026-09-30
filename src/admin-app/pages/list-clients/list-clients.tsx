@@ -1717,12 +1717,16 @@ const ListClients = () => {
                                   <img
                                     src="https://upload.wikimedia.org/wikipedia/commons/5/5e/WhatsApp_icon.png"
                                     alt="WhatsApp"
-                                    style={{
-                                      width: "20px",
-                                      height: "20px",
-                                      // objectFit: "contain",
-                                      cursor: "pointer",
-                                    }}
+                                   style={{
+  width: "20px",
+  height: "20px",
+  minWidth: "20px",
+  maxWidth: "none",
+  objectFit: "contain",
+  display: "block",
+  flexShrink: 0,
+  cursor: "pointer",
+}}
                                   />
                                 </a>
                               </div>
