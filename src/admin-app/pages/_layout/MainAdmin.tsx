@@ -40,7 +40,19 @@ const MainAdmin = () => {
   return (
     <div className="admin">
       <Header />
-      <ToastContainer />
+    <ToastContainer
+  position="top-right"
+  autoClose={500}
+  hideProgressBar={true}
+  newestOnTop={true}
+  // closeOnClick
+  rtl={false}
+  pauseOnFocusLoss={false}
+  draggable
+  pauseOnHover={false}
+  theme="colored"
+  limit={3}
+/>
       {isMobile ? (
         <div className={`main ${isOpen ? "ml-24" : ""}`}>
           {(location.pathname.includes("odds/") ||

@@ -143,25 +143,24 @@ const ListClients = () => {
 
   // console.log(useParams(), "my all params")
 
-  // Close modal when clicking outside
+  // Close Action popup when clicking anywhere outside it
   useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target as Node)
-      ) {
-        setExpandedUserId(null); // Close modal
-      }
+    const handleOutsideClick = (event: globalThis.MouseEvent) => {
+      const target = event.target as HTMLElement;
+
+      // Popup ke andar click hua to close nahi karna
+      if (target.closest(".actions-td")) return;
+
+      // Action toggle button ko handleToggle khud handle karega
+      if (target.closest(".action-toggle-btn")) return;
+
+      setExpandedUserId(null);
     };
 
-    // Add event listener to document
-    // document.addEventListener('click', handleOutsideClick);
+    document.addEventListener("mousedown", handleOutsideClick);
 
-    // Clean up event listener on unmount
     return () => {
-      // document.removeEventListener('click', handleOutsideClick);
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
 
@@ -1295,10 +1294,11 @@ const ListClients = () => {
                             <td className="relative-btn">
                               {" "}
                               <button
-                                className=""
-                                onClick={() =>
-                                  user._id && handleToggle(user._id)
-                                }
+                                className="action-toggle-btn"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  user._id && handleToggle(user._id);
+                                }}
                               >
                                 <ArrowDropDownIcon className="size-2" />
                               </button>
@@ -1306,19 +1306,11 @@ const ListClients = () => {
                                 className={`actions-td ${
                                   expandedUserId === user._id ? "open" : ""
                                 }`}
-                                // ref={modalRef}
+                                onClick={(e) => e.stopPropagation()}
                               >
                                 <p className="bg-gray-800 hidden text-white p-2">
                                   Action for the user - {user.username}
                                 </p>
-                                <button
-                                  className="closed bg-gray-800 text-white"
-                                  onClick={() =>
-                                    user._id && handleToggle(user._id)
-                                  }
-                                >
-                                  <CloseButton className="text-white" />
-                                </button>
                                 <div
                                   className="actions-container  p-4"
                                   style={{ backgroundColor: "#F4EED0" }}
