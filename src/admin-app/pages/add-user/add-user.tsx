@@ -349,9 +349,9 @@ const AddUser = () => {
       return;
     }
 
-    if (Number(data.mcom) > 1.5
+    if (Number(data.mcom) > 2
      || Number(data.mcom) < 0) {
-      toast.error("Match commission must be between 0 and 1.5");
+      toast.error("Match commission must be between 0 and 2");
       return;
     }
 
@@ -946,7 +946,7 @@ const AddUser = () => {
 
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label htmlFor="mcom">Match Commision(≤1.5%)</label>
+                          <label htmlFor="mcom">Match Commision</label>
                           <input
                             className="form-control"
                             placeholder="M Comm Limit"
@@ -964,7 +964,7 @@ const AddUser = () => {
 
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label htmlFor="matcom">Matka Commision(≤10%)</label>
+                          <label htmlFor="matcom">Matka Commision</label>
                           <input
                             className="form-control"
                             placeholder="M Comm Limit"
@@ -983,7 +983,7 @@ const AddUser = () => {
 
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label htmlFor="scom">Session Commision(≤4.5%)</label>
+                          <label htmlFor="scom">Session Commision</label>
                           <input
                             className="form-control"
                             placeholder="S Comm Limit"
