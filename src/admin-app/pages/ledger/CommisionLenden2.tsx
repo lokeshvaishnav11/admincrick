@@ -1,334 +1,160 @@
-import React, { useState } from "react";
-import "./ClientLedger.css"; // Import the CSS file
+import React, { useEffect, useMemo, useState } from "react";
+import "./ClientLedger.css";
 import betService from "../../../services/bet.service";
 import { AxiosResponse } from "axios";
 
+type Kind = "match" | "casino" | "session" | "matka";
+type Totals = Record<Kind, number>;
+interface LedgerEntry {
+  ChildId?: string;
+  ParentId?: string;
+  username?: string;
+  cname?: string;
+  narration?: string;
+  createdAt?: string;
+  Fancy?: boolean;
+  casinostatus?: boolean;
+  iscomSet?: boolean;
+  commissionlega?: number;
+  commissiondega?: number;
+}
 interface CommissionRow {
+  id: string;
   name: string;
   cname: string;
-  milaCasinoComm: number;
-  milaSportsComm: number;
-  milaMatkaComm: number;    // ✅
-  milaTotalComm: number;
-  denaCasinoComm: number;
-  denaSportsComm: number;
-  denaMatkaComm: number;    // ✅
-  denaTotalComm: number;
-  date?: string;
+  mila: Totals;
+  dena: Totals;
 }
+const kinds: Kind[] = ["match", "casino", "session", "matka"];
+const blank = (): Totals => ({ match: 0, casino: 0, session: 0, matka: 0 });
+const num = (value: unknown): number => {
+  const parsed = Number(value ?? 0);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+const classify = (entry: LedgerEntry): Kind => {
+  if (entry.casinostatus === true) return "casino";
+  if (entry.narration?.includes("Matka Bet")) return "matka";
+  if (entry.Fancy === true) return "session";
+  return "match";
+};
+const sum = (values: Totals) => kinds.reduce((total, key) => total + values[key], 0);
+const amount = (value: number) => value.toFixed(2);
 
 const CommisionLenden2: React.FC = () => {
-  const [commissionData, setCommissionData] = useState<CommissionRow[]>([]);
-  const [allEntries, setAllEntries] = useState<any[][]>([]);
+  const [allEntries, setAllEntries] = useState<LedgerEntry[]>([]);
+  const [optionuser, setOptionuser] = useState("all");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [appliedDates, setAppliedDates] = useState<{ start: string; end: string } | null>(null);
+  const [zoom] = useState(1);
 
-  const [optionuser, setOptionuser] = React.useState<string>("all");
-
-  const [startDate, setStartDate] = React.useState<string>("");
-  const [endDate, setEndDate] = React.useState<string>("");
-  const [zoom, setZoom] = React.useState(1);
-
-  React.useEffect(() => {
-    betService.oneledger().then((res: AxiosResponse<any>) => {
-      //console.log(res, "dmbsdbh lena dena");
-      const data = res.data.data;
-      const processed = processCommissionTable(data);
-      setCommissionData(processed);
-      setAllEntries(data);
-    });
+  useEffect(() => {
+    betService.oneledger()
+      .then((res: AxiosResponse<any>) => {
+        const data = res.data?.data;
+        setAllEntries(Array.isArray(data?.[0]) ? data[0] : []);
+      })
+      .catch((error: unknown) => console.error("Commission history load failed:", error));
   }, []);
 
-  const processCommissionTable = (data: any[][]): CommissionRow[] => {
-    const milaCasinoMap: Record<string, number> = {};
-    const milaSportsMap: Record<string, number> = {};
-    const milaMatkaMap: Record<string, number> = {};
+  // This page is the settled commission HISTORY: don't mix in unsettled entries.
+  const settledEntries = useMemo(
+    () => allEntries.filter((entry) => entry.iscomSet === true),
+    [allEntries]
+  );
 
-    const denaCasinoMap: Record<string, number> = {};
-    const denaSportsMap: Record<string, number> = {};
-    const denaMatkaMap: Record<string, number> = {};
-
-    const usernameMap: Record<string, string> = {};
-    const cnameMap: Record<string, string> = {};
-
-    // const sourceArray = data[0]?.length > 0 ? data[1] : data[1] || [];
-    const sourceArray = data[0]?.length > 0 ? data[0] : data[0] || [];
-
-    sourceArray.forEach((entry: any) => {
-      const childId = entry.ChildId;
-      const isFancy = entry.Fancy === true;
-      const isMatka = entry?.narration?.includes("Matka Bet"); // ✅
-
-      // const mila = entry.commissionlega || 0;
-      // const dena = entry.commissiondega || 0;
-      const mila = entry.commissionlega || 0;
-      const dena = entry.commissiondega || 0;
-
-      // Set name based on ParentId match from data[0]
-      if (!usernameMap[childId]) {
-        const match = data[0]?.find((ref: any) => ref.ParentId === childId);
-        usernameMap[childId] = match?.username || entry.username || childId;
-      }
-
-      if (!cnameMap[childId]) {
-        const match = data[0]?.find((ref: any) => ref.ParentId === childId);
-        cnameMap[childId] = match?.cname || entry.cname || childId;
-      }
-
-      // Init maps
-      if (!milaCasinoMap[childId]) milaCasinoMap[childId] = 0;
-      if (!milaSportsMap[childId]) milaSportsMap[childId] = 0;
-      if (!milaMatkaMap[childId]) milaMatkaMap[childId] = 0;   // ✅
-
-      if (!denaCasinoMap[childId]) denaCasinoMap[childId] = 0;
-      if (!denaSportsMap[childId]) denaSportsMap[childId] = 0;
-      if (!denaMatkaMap[childId]) denaMatkaMap[childId] = 0;   // ✅
-
-
-      if (isMatka) {
-        milaMatkaMap[childId] += mila;
-        denaMatkaMap[childId] += dena;
-      } else if (isFancy) {
-        milaSportsMap[childId] += mila;
-        denaSportsMap[childId] += dena;
-      } else {
-        milaCasinoMap[childId] += mila;
-        denaCasinoMap[childId] += dena;
-      }
+  const visibleEntries = useMemo(() => {
+    if (!appliedDates) return settledEntries;
+    const from = new Date(`${appliedDates.start}T00:00:00`);
+    const to = new Date(`${appliedDates.end}T23:59:59.999`);
+    return settledEntries.filter((entry) => {
+      if (!entry.createdAt) return false;
+      const date = new Date(entry.createdAt);
+      return date >= from && date <= to;
     });
+  }, [settledEntries, appliedDates]);
 
-    const allChildIds = new Set([
-      ...Object.keys(milaCasinoMap),
-      ...Object.keys(milaSportsMap),
-      ...Object.keys(denaCasinoMap),
-      ...Object.keys(denaSportsMap),
-    ]);
+  const rows = useMemo<CommissionRow[]>(() => {
+    const map = new Map<string, CommissionRow>();
+    for (const entry of visibleEntries) {
+      const id = String(entry.ChildId ?? entry.username ?? "");
+      if (!id) continue;
+      if (!map.has(id)) {
+        const ref = allEntries.find((item) => String(item.ParentId ?? "") === id);
+        map.set(id, {
+          id,
+          name: ref?.username || entry.username || id,
+          cname: ref?.cname || entry.cname || id,
+          mila: blank(),
+          dena: blank(),
+        });
+      }
+      const row = map.get(id)!;
+      const kind = classify(entry);
+      row.mila[kind] += num(entry.commissionlega);
+      row.dena[kind] += num(entry.commissiondega);
+    }
+   return Array.from(map.values());
+  }, [visibleEntries, allEntries]);
 
-    let totalMilaCasino = 0;
-    let totalMilaSports = 0;
-    let totalDenaCasino = 0;
-    let totalDenaSports = 0;
-    let totalMilaMatka = 0;
-let totalDenaMatka = 0;
+  const grand = useMemo(() => {
+    const mila = blank();
+    const dena = blank();
+    for (const row of rows) {
+      for (const kind of kinds) {
+        mila[kind] += row.mila[kind];
+        dena[kind] += row.dena[kind];
+      }
+    }
+    return { mila, dena };
+  }, [rows]);
 
-
-
-    const result: CommissionRow[] = [];
-
-    allChildIds.forEach((id) => {
-      const milaCasino = milaCasinoMap[id] || 0;
-      const milaSports = milaSportsMap[id] || 0;
-      const milaMatka = milaMatkaMap[id] || 0;
-
-      const denaCasino = denaCasinoMap[id] || 0;
-      const denaSports = denaSportsMap[id] || 0;
-      const denaMatka = denaMatkaMap[id] || 0;
-
-
-      totalMilaCasino += milaCasino;
-      totalMilaSports += milaSports;
-      totalDenaCasino += denaCasino;
-      totalDenaSports += denaSports;
-      totalMilaMatka += milaMatka;
-totalDenaMatka += denaMatka;
-
-      result.push({
-        name: usernameMap[id] || id,
-        cname: cnameMap[id] || id,
-        milaCasinoComm: milaCasino,
-        milaSportsComm: milaSports,
-        milaMatkaComm: milaMatka,
-        milaTotalComm: milaCasino + milaSports + milaMatka,
-        denaCasinoComm: denaCasino,
-        denaSportsComm: denaSports,
-        denaMatkaComm: denaMatka,
-        denaTotalComm: denaCasino + denaSports + denaMatka,
-      });
-    });
-
-    result.push({
-      name: "TOTAL",
-      cname: "All",
-      milaCasinoComm: totalMilaCasino,
-      milaSportsComm: totalMilaSports,
-      milaMatkaComm: totalMilaMatka,
-      milaTotalComm: totalMilaCasino + totalMilaSports + totalMilaMatka,
-      denaCasinoComm: totalDenaCasino,
-      denaSportsComm: totalDenaSports,
-      denaMatkaComm: totalDenaMatka,
-      denaTotalComm: totalDenaCasino + totalDenaSports + totalDenaMatka ,
-    });
-
-    console.log(result, "ressss")
-
-    return result;
-  };
+  const selected = rows.find((row) => row.id === optionuser);
+  const userEntries = visibleEntries.filter(
+    (entry) => String(entry.ChildId ?? entry.username ?? "") === optionuser
+  );
+  const detailTotals = useMemo(() => {
+    const mila = blank();
+    const dena = blank();
+    for (const entry of userEntries) {
+      const kind = classify(entry);
+      mila[kind] += num(entry.commissionlega);
+      dena[kind] += num(entry.commissiondega);
+    }
+    return { mila, dena };
+  }, [userEntries]);
 
   const handleDateFilter = () => {
     if (!startDate || !endDate) return;
-
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    end.setHours(23, 59, 59, 999); // Include full end day
-
-    const filteredData =
-      allEntries[0]?.filter((entry: any) => {
-        const entryDate = new Date(entry.createdAt);
-        return entryDate >= start && entryDate <= end;
-      }) || [];
-
-    // Reprocess only with filtered entries
-    const updatedCommissionData = processCommissionTable([filteredData]);
-    setCommissionData(updatedCommissionData);
+    if (startDate > endDate) {
+      window.alert("Start Date, End Date se aage nahi honi chahiye.");
+      return;
+    }
+    setAppliedDates({ start: startDate, end: endDate });
   };
-
-  const renderUserDetails = (childId: string) => {
-    //console.log(childId, "cjhild");
-    //console.log(allEntries, "allentries");
-    const sourceArray =
-      allEntries[1]?.length > 0 ? allEntries[0] : allEntries[0] || [];
-    //console.log(sourceArray, "source array");
-    const filtered = sourceArray.filter(
-      (item: any) => item.username === childId && item.iscomSet === true
-    );
-
-    let totalMilaCasino = 0;
-    let totalMilaSports = 0;
-    let totalMilaMatka = 0;
-    let totalDenaCasino = 0;
-    let totalDenaSports = 0;
-    let totalDenaMatka = 0;
-
-
-    const rows = filtered.map((item: any, index: number) => {
-      const isFancy = item.Fancy === true;
-      const isMatka = item?.narration?.includes("Matka Bet"); // ✅
-      const mila = item.commissionlega || 0;
-      const dena = item.commissiondega || 0;
-
-      if (isMatka) {
-        totalMilaMatka += mila;
-        totalDenaMatka += dena;
-      } else if (isFancy) {
-        totalMilaSports += mila;
-        totalDenaSports += dena;
-      } else {
-        totalMilaCasino += mila;
-        totalDenaCasino += dena;
-      }
-
-      return (
-        <tr key={index}>
-          <td>{new Date(item.createdAt).toLocaleString()}</td>
-          <td>{item.narration || "N/A"}</td>
-          <td>{!isFancy ? mila.toFixed(2) : "-"}</td>
-          <td>{isFancy ? mila.toFixed(2) : "-"}</td>
-          <td>{isMatka ? mila.toFixed(2) : "-"}</td>
-          <td>{!isFancy ? dena.toFixed(2) : "-"}</td>
-          <td>{isFancy ? dena.toFixed(2) : "-"}</td>
-          <td>{isMatka ? dena.toFixed(2) : "-"}</td>
-
-        </tr>
-      );
-    });
-
-    const totalRow = (
-      <tr>
-        <td colSpan={2}>
-          <strong>TOTAL</strong>
-        </td>
-        <td>{totalMilaCasino.toFixed(2)}</td>
-        <td>{totalMilaSports.toFixed(2)}</td>
-        <td>{totalMilaMatka.toFixed(2)}</td>
-
-        <td>{totalDenaCasino.toFixed(2)}</td>
-        <td>{totalDenaSports.toFixed(2)}</td>
-        <td>{totalDenaMatka.toFixed(2)}</td>
-
-      </tr>
-    );
-
-    return [...rows, totalRow];
-  };
-
-  //  date filter in particular user too
-  // const renderUserDetails = (childId: string) => {
-  //   const sourceArray = allEntries[0] || [];
-
-  //   const filtered = sourceArray.filter((item: any) => {
-  //     const matchesUser = item.username === childId;
-  //     if (!startDate || !endDate) return matchesUser;
-
-  //     const entryDate = new Date(item.createdAt);
-  //     const start = new Date(startDate);
-  //     const end = new Date(endDate);
-  //     end.setHours(23, 59, 59, 999);
-
-  //     return matchesUser && entryDate >= start && entryDate <= end;
-  //   });
-  //   ...
-  // };
-
-  //console.log(commissionData, "commsiondata")
-
-  // const settled = (name:any) =>{
-  //   betService.comreset(name).then((res)=>{
-  //     //console.log(res,"check resetttt")
-  //   })
-  // }
-
-
 
   return (
     <div style={{ zoom }}>
-     
-
       <div className="bg-full">Commision Len Den History</div>
-
       <div className="row p-4">
         <div className="col-6 mt-1">
-          <label className="small"> Start Date</label>
-          {/* <input type="date" className="form-control start_date "  name="start_date"/> */}
-          <input
-            type="date"
-            className="form-control start_date"
-            name="start_date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
+          <label className="small">Start Date</label>
+          <input type="date" className="form-control start_date" name="start_date"
+            value={startDate} onChange={(e) => setStartDate(e.target.value)} />
         </div>
         <div className="col-6 mt-1">
-          <label className="small"> End Date</label>
-          {/* <input type="date" className="form-control end_date "  name="end_date"/> */}
-          <input
-            type="date"
-            className="form-control end_date"
-            name="end_date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-          />
+          <label className="small">End Date</label>
+          <input type="date" className="form-control end_date" name="end_date"
+            value={endDate} onChange={(e) => setEndDate(e.target.value)} />
         </div>
-
-        <button
-          className="btn btn-primary mt-2 mx-3"
-          onClick={handleDateFilter}
-        >
-          Submit
-        </button>
+        <button type="button" className="btn btn-primary mt-2 mx-3" onClick={handleDateFilter}>Submit</button>
       </div>
-
-      <select
-        id="select-tools-sa"
+      <select id="select-tools-sa"
         className="selectized mx-4 selectize-input ng-valid ng-not-empty ng-dirty ng-valid-parse ng-touched"
-        value={optionuser}
-        onChange={(e) => setOptionuser(e.target.value)}
-      >
+        value={optionuser} onChange={(e) => setOptionuser(e.target.value)}>
         <option value="all">All Clients</option>
-        {commissionData?.map((row: any, index) => (
-          <option key={index} value={row.client}>
-            {row.name}
-          </option>
-        ))}
+        {rows.map((row) => <option key={row.id} value={row.id}>{row.name}</option>)}
       </select>
-
       <div className="table-container">
         <div className="table-wrapper">
           <table className="commission-table">
@@ -336,107 +162,65 @@ totalDenaMatka += denaMatka;
               {optionuser === "all" ? (
                 <>
                   <tr>
-                    <th
-                      style={{
-                        borderRightColor: "black",
-                        borderRightWidth: "20px",
-                      }}
-                      colSpan={5}
-                    >
-                      MILA HAI
-                    </th>
+                    <th colSpan={6} style={{ borderRightColor: "black", borderRightWidth: "20px" }}>MILA HAI</th>
                     <th colSpan={5}>DENA HAI</th>
                   </tr>
                   <tr>
-                    <th>Name</th>
-                    <th>M Comm</th>
-                    <th>S Comm</th>
-                    <th>Mat Comm</th>
-
-                    <th
-                      style={{
-                        borderRightColor: "black",
-                        borderRightWidth: "20px",
-                      }}
-                    >
-                      Total Comm
-                    </th>
-                    <th>M Comm</th>
-                    <th>S Comm</th>
-                    <th>Mat Comm</th>
-
-                    <th>Total Comm</th>
+                    <th>Name</th><th>M Comm</th><th>Casino Comm</th><th>S Comm</th><th>Mat Comm</th>
+                    <th style={{ borderRightColor: "black", borderRightWidth: "20px" }}>Total Comm</th>
+                    <th>M Comm</th><th>Casino Comm</th><th>S Comm</th><th>Mat Comm</th><th>Total Comm</th>
+                  </tr>
+                </>
+              ) : (
+                <tr>
+                  <th>Date</th><th>Narration</th>
+                  <th>M Mila</th><th>Casino Mila</th><th>S Mila</th><th>Mat Mila</th>
+                  <th>M Dena</th><th>Casino Dena</th><th>S Dena</th><th>Mat Dena</th>
+                </tr>
+              )}
+            </thead>
+            <tbody>
+              {optionuser === "all" ? (
+                <>
+                  {rows.map((row) => (
+                    <tr key={row.id}>
+                      <td>{row.name} ({row.cname})</td>
+                      {kinds.map((kind) => <td key={`m-${kind}`}>{amount(row.mila[kind])}</td>)}
+                      <td style={{ borderRightColor: "black", borderRightWidth: "20px" }}>{amount(sum(row.mila))}</td>
+                      {kinds.map((kind) => <td key={`d-${kind}`}>{amount(row.dena[kind])}</td>)}
+                      <td>{amount(sum(row.dena))}</td>
+                    </tr>
+                  ))}
+                  <tr>
+                    <td><strong>TOTAL</strong></td>
+                    {kinds.map((kind) => <td key={`tm-${kind}`}>{amount(grand.mila[kind])}</td>)}
+                    <td style={{ borderRightColor: "black", borderRightWidth: "20px" }}>{amount(sum(grand.mila))}</td>
+                    {kinds.map((kind) => <td key={`td-${kind}`}>{amount(grand.dena[kind])}</td>)}
+                    <td>{amount(sum(grand.dena))}</td>
                   </tr>
                 </>
               ) : (
                 <>
+                  {userEntries.map((entry, index) => {
+                    const kind = classify(entry);
+                    const mila = num(entry.commissionlega);
+                    const dena = num(entry.commissiondega);
+                    return (
+                      <tr key={index}>
+                        <td>{entry.createdAt ? new Date(entry.createdAt).toLocaleString() : "-"}</td>
+                        <td>{entry.narration || "N/A"}</td>
+                        {kinds.map((key) => <td key={`m-${key}`}>{kind === key ? amount(mila) : "-"}</td>)}
+                        {kinds.map((key) => <td key={`d-${key}`}>{kind === key ? amount(dena) : "-"}</td>)}
+                      </tr>
+                    );
+                  })}
                   <tr>
-                    <th>Date</th>
-                    <th>Narration</th>
-                    <th>M Mila</th>
-                    <th>S Mila</th>
-                    <th>Mat Mila</th>
-                    <th>M Dena</th>
-                    <th>S Dena</th>
-                    <th>Mat Dena</th>
+                    <td colSpan={2}><strong>TOTAL{selected ? ` - ${selected.name}` : ""}</strong></td>
+                    {kinds.map((kind) => <td key={`tm-${kind}`}>{amount(detailTotals.mila[kind])}</td>)}
+                    {kinds.map((kind) => <td key={`td-${kind}`}>{amount(detailTotals.dena[kind])}</td>)}
                   </tr>
                 </>
               )}
-            </thead>
-            <tbody>
-              {/* {optionuser === "all"
-                ? commissionData?.filter((row, index, self) => index === self.findIndex((r) => r.name === row.name))?.map((row) => (
-                    {row.milaTotalComm.toFixed(2) >0 && row.denaTotalComm.toFixed(2) > 0 && ( <tr  key={row.name}>
-                      <td className="">{row.name}{`(${row.cname})`}<button onClick={() => settled(row.name)} className="bg-yellow-400 mt-1.5 px-2 py-1.5 rounded-md">Reset</button></td>
-                      <td className="">{row.milaCasinoComm.toFixed(2)}</td>
-                      <td>{row.milaSportsComm.toFixed(2)}</td>
-                      <td style={{borderRightColor:"darkgoldenrod", borderRightWidth:"20px"}}>{row.milaTotalComm.toFixed(2)}</td>
-                      <td>{row.denaCasinoComm.toFixed(2)}</td>
-                      <td>{row.denaSportsComm.toFixed(2)}</td>
-                      <td>{row.denaTotalComm.toFixed(2)}</td>
-                    </tr>)}
-                  ))
-                : renderUserDetails(optionuser)} */}
-              {optionuser === "all"
-                ? commissionData
-                    ?.filter(
-                      (row, index, self) =>
-                        index === self.findIndex((r) => r.name === row.name)
-                    )
-                    ?.map(
-                      (row) =>
-                        // Number(row?.milaTotalComm.toFixed(2)) +
-                        //   Number(row?.denaTotalComm.toFixed(2))
-                        1 >
-                          0 && (
-                          <tr key={row.name}>
-                            <td className="">
-                              {row.name}
-                              {`(${row.cname})`}
-
-                            </td>
-                            <td className="">
-                              {row.milaCasinoComm.toFixed(2)}
-                            </td>
-                            <td>{row.milaSportsComm.toFixed(2)}</td>
-                            <td>{row.milaMatkaComm.toFixed(2)}</td>
-
-                            <td
-                              style={{
-                                borderRightColor: "black",
-                                borderRightWidth: "20px",
-                              }}
-                            >
-                              {row.milaTotalComm.toFixed(2)}
-                            </td>
-                            <td>{row.denaCasinoComm.toFixed(2)}</td>
-                            <td>{row.denaSportsComm.toFixed(2)}</td>
-                            <td>{row.denaMatkaComm.toFixed(2)}</td>
-                            <td>{row.denaTotalComm.toFixed(2)}</td>
-                          </tr>
-                        )
-                    )
-                : renderUserDetails(optionuser)}
             </tbody>
           </table>
         </div>

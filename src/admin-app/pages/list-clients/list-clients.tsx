@@ -1028,7 +1028,7 @@ const ListClients = () => {
                         Balance{" "}
                       </th>
                       <th
-                        colSpan={3}
+                        colSpan={4}
                         className="text-center navbar-bet99 text-dark"
                         rowSpan={1}
                       >
@@ -1070,6 +1070,7 @@ const ListClients = () => {
                       <th>Match %</th>
                       <th>Session %</th>
                       <th>Matka %</th>
+                      <th>Casino %</th>
 
                       {/* <th>Account Type</th> */}
                       {/* <th className="noExport">Actions</th> */}
@@ -1867,6 +1868,7 @@ const ListClients = () => {
                             <td>{user.mcom}%</td>
                             <td>{user.scom}%</td>
                             <td>{user.matcom}%</td>
+                            <td>{Number(user.cascom ?? 0)}%</td>
 
                             {/* <td>{RoleName[user.role!]}</td> */}
                           </tr>
