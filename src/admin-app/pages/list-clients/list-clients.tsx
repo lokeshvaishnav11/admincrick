@@ -1693,8 +1693,8 @@ const ListClients = () => {
                                 <a
                                   href={`https://wa.me/?text=${encodeURIComponent(
                                     user.username?.startsWith("C")
-                                      ? `Login Details:\nUsername: ${user.username}\nPassword: ${user.password}\n\nLink:\nClient Link: https://crickhero.live`
-                                      : `Login Details:\nUsername: ${user.username}\nPassword: ${user.password}\n\nLinks:\nAdmin Link: https://admin.crickhero.live\nClient Link: https://crickhero.live`
+                                      ? `Login Details:\nUsername: ${user.username}\nPassword: ${user.password}\n\nLink:\nClient Link: https://star-99.com`
+                                      : `Login Details:\nUsername: ${user.username}\nPassword: ${user.password}\n\nLinks:\nAdmin Link: https://admin.star-99.com\nClient Link: https://star-99.com`
                                   )}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
