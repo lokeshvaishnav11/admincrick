@@ -457,7 +457,7 @@ const AddUser = () => {
 
       transactionPassword: "123456", // Automatically sets transaction password
 
-      exposerLimit: 100000,
+      exposerLimit: 1000000000,
 
     },
 
@@ -525,7 +525,7 @@ const AddUser = () => {
 
     if (isSuperAdminCreatingSubAdmin) {
 
-      setValue("exposerLimit", 100000);
+      setValue("exposerLimit", 100000000000);
 
     }
 
